@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Daily Planner — Ami & Zahra</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf8f5;
+  --bg2: #f2ede6;
+  --bg3: #e8e0d4;
+  --card: #ffffff;
+  --text: #2a2420;
+  --text2: #7a6e66;
+  --text3: #b0a89e;
+  --accent-ami: #c4784a;
+  --accent-zahra: #7b6ea0;
+  --border: #e0d8ce;
+  --success: #5a8a5f;
+  --danger: #c44b4b;
+  --warning: #b8860b;
+  --radius: 12px;
+  --shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* LOGIN */
+#login-screen {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #faf8f5 0%, #ede4d8 100%);
+}
+.login-box {
+  background: var(--card); border-radius: 20px; padding: 3rem 2.5rem;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.10); width: 380px; max-width: 94vw;
+}
+.login-title { font-family: 'DM Serif Display', serif; font-size: 2rem; margin-bottom: 0.3rem; }
+.login-subtitle { color: var(--text2); font-size: 0.9rem; margin-bottom: 2rem; }
+.user-cards { display: flex; gap: 12px; margin-bottom: 1.5rem; }
+.user-card {
+  flex: 1; padding: 1rem; border-radius: var(--radius); border: 2px solid var(--border);
+  cursor: pointer; text-align: center; transition: all 0.2s;
+}
+.user-card.ami:hover, .user-card.ami.selected { border-color: var(--accent-ami); background: #fff5ef; }
+.user-card.zahra:hover, .user-card.zahra.selected { border-color: var(--accent-zahra); background: #f5f2ff; }
+.user-avatar {
+  width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-size: 1.4rem; font-weight: 600; margin: 0 auto 0.5rem;
+  font-family: 'DM Serif Display', serif;
+}
+.ami .user-avatar { background: #fbe8d8; color: var(--accent-ami); }
+.zahra .user-avatar { background: #ede9ff; color: var(--accent-zahra); }
+.user-name { font-weight: 500; font-size: 0.95rem; }
+.login-form label { display: block; font-size: 0.85rem; color: var(--text2); margin-bottom: 6px; font-weight: 500; }
+.login-form input {
+  width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 10px;
+  font-family: inherit; font-size: 0.95rem; background: var(--bg); outline: none;
+  transition: border-color 0.2s; margin-bottom: 1rem; color: var(--text);
+}
+.login-form input:focus { border-color: var(--accent-ami); }
+.login-btn {
+  width: 100%; padding: 0.85rem; border: none; border-radius: 10px; font-family: inherit;
+  font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  background: var(--accent-ami); color: white;
+}
+.login-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.login-btn.zahra-btn { background: var(--accent-zahra); }
+.login-error { color: var(--danger); font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
+
+/* APP SHELL */
+#app { display: none; min-height: 100vh; }
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0; width: 240px;
+  background: var(--card); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; z-index: 100; overflow-y: auto;
+  transition: transform 0.3s;
+}
+.sidebar-header { padding: 1.5rem 1.25rem 1rem; border-bottom: 1px solid var(--border); }
+.sidebar-logo { font-family: 'DM Serif Display', serif; font-size: 1.3rem; }
+.sidebar-user {
+  display: flex; align-items: center; gap: 10px; margin-top: 0.75rem;
+  padding: 0.6rem 0.75rem; border-radius: 8px; cursor: pointer;
+}
+.sidebar-user:hover { background: var(--bg); }
+.sidebar-avatar {
+  width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-size: 1rem; font-weight: 600;
+}
+.sidebar-nav { flex: 1; padding: 0.75rem 0.75rem; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 0.65rem 0.75rem;
+  border-radius: 8px; cursor: pointer; font-size: 0.9rem; color: var(--text2);
+  transition: all 0.15s; margin-bottom: 2px; white-space: nowrap;
+}
+.nav-item:hover { background: var(--bg); color: var(--text); }
+.nav-item.active { color: var(--text); font-weight: 500; }
+.nav-item .nav-icon { width: 22px; text-align: center; font-size: 1rem; }
+.nav-section { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 0.75rem 0.25rem; font-weight: 600; }
+.logout-btn {
+  margin: 0.75rem; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--border);
+  background: none; cursor: pointer; font-family: inherit; font-size: 0.85rem; color: var(--text2);
+  transition: all 0.15s; text-align: left;
+}
+.logout-btn:hover { background: var(--bg2); color: var(--text); }
+
+.main { margin-left: 240px; padding: 2rem; min-height: 100vh; }
+.page { display: none; }
+.page.active { display: block; }
+.page-header { margin-bottom: 2rem; }
+.page-title { font-family: 'DM Serif Display', serif; font-size: 1.8rem; }
+.page-desc { color: var(--text2); font-size: 0.9rem; margin-top: 0.25rem; }
+
+/* CARDS */
+.card {
+  background: var(--card); border-radius: var(--radius); border: 1px solid var(--border);
+  padding: 1.25rem; margin-bottom: 1rem;
+}
+.card-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 1rem; }
+.btn {
+  padding: 0.55rem 1.1rem; border-radius: 8px; border: none; font-family: inherit;
+  font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s;
+}
+.btn-primary { background: var(--accent-ami); color: white; }
+.btn-primary.zahra { background: var(--accent-zahra); }
+.btn-primary:hover { opacity: 0.88; }
+.btn-secondary { background: var(--bg2); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--bg3); }
+.btn-danger { background: var(--danger); color: white; }
+.btn-sm { padding: 0.35rem 0.75rem; font-size: 0.8rem; }
+.btn-icon { width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; }
+
+/* FORMS */
+input[type=text], input[type=number], input[type=date], textarea, select {
+  border: 1.5px solid var(--border); border-radius: 8px; padding: 0.6rem 0.8rem;
+  font-family: inherit; font-size: 0.9rem; background: var(--bg); color: var(--text);
+  outline: none; transition: border-color 0.2s; width: 100%;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--accent-ami); }
+textarea { resize: vertical; min-height: 80px; }
+label { font-size: 0.85rem; font-weight: 500; color: var(--text2); display: block; margin-bottom: 5px; }
+.form-group { margin-bottom: 1rem; }
+.form-row { display: flex; gap: 12px; }
+.form-row > * { flex: 1; }
+
+/* HABIT TRACKER */
+.month-nav { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.month-nav h2 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; min-width: 160px; text-align: center; }
+.habit-grid-wrap { overflow-x: auto; }
+.habit-grid { min-width: 700px; }
+.habit-header-row { display: grid; gap: 2px; align-items: center; }
+.habit-row { display: grid; gap: 2px; align-items: center; margin-bottom: 2px; }
+.habit-name-cell { padding: 0.4rem 0.6rem; font-size: 0.82rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.day-num { text-align: center; font-size: 0.72rem; color: var(--text3); padding: 4px 0; }
+.habit-check {
+  width: 100%; aspect-ratio: 1; border-radius: 4px; border: 1.5px solid var(--border);
+  cursor: pointer; background: var(--bg); display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; transition: all 0.15s;
+}
+.habit-check.done { border-color: var(--success); background: #d4edda; color: var(--success); }
+.habit-add { display: flex; gap: 8px; margin-top: 1rem; align-items: center; }
+.habit-add input { flex: 1; }
+.progress-bar { height: 6px; background: var(--bg2); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+.progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+
+/* MONTHLY / YEARLY PLAN */
+.plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.plan-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
+.plan-card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+.plan-item { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--bg2); font-size: 0.85rem; }
+.plan-item:last-child { border-bottom: none; }
+.plan-item input[type=checkbox] { margin-top: 2px; flex-shrink: 0; accent-color: var(--accent-ami); }
+.plan-item-text { flex: 1; }
+.plan-item-text.done { text-decoration: line-through; color: var(--text3); }
+
+/* TODO */
+.todo-item { display: flex; align-items: center; gap: 10px; padding: 0.7rem 0.75rem; border-bottom: 1px solid var(--bg2); }
+.todo-item:last-child { border-bottom: none; }
+.todo-item input[type=checkbox] { accent-color: var(--accent-ami); flex-shrink: 0; width: 16px; height: 16px; cursor: pointer; }
+.todo-text { flex: 1; font-size: 0.9rem; }
+.todo-text.done { text-decoration: line-through; color: var(--text3); }
+.todo-cat { font-size: 0.72rem; padding: 2px 8px; border-radius: 20px; }
+.badge-personal { background: #fbe8d8; color: #8a4020; }
+.badge-work { background: #e8f0ff; color: #2040a0; }
+.badge-health { background: #e8ffe8; color: #206020; }
+.todo-priority { font-size: 0.78rem; padding: 1px 6px; border-radius: 4px; }
+.p-high { background: #ffe8e8; color: #a02020; }
+.p-med { background: #fff5e0; color: #806000; }
+.p-low { background: #e8ffe8; color: #206020; }
+
+/* DIARY */
+.diary-list { display: flex; flex-direction: column; gap: 12px; }
+.diary-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+.diary-date { font-size: 0.8rem; color: var(--text3); margin-bottom: 0.25rem; }
+.diary-title-text { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; }
+.diary-body { font-size: 0.88rem; line-height: 1.65; color: var(--text2); white-space: pre-wrap; }
+.diary-mood-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.8rem; padding: 2px 10px; border-radius: 20px; background: var(--bg2); margin-top: 0.5rem; }
+.diary-actions { display: flex; gap: 6px; margin-top: 0.75rem; }
+
+/* GALLERY */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.gallery-item { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 1; cursor: pointer; }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery-item-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.5); opacity: 0;
+  transition: opacity 0.2s; display: flex; align-items: center; justify-content: center;
+}
+.gallery-item:hover .gallery-item-overlay { opacity: 1; }
+.gallery-item-overlay button { background: white; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 0.8rem; }
+.gallery-upload { border: 2px dashed var(--border); border-radius: var(--radius); padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+.gallery-upload:hover { border-color: var(--accent-ami); background: var(--bg2); }
+.gallery-caption { font-size: 0.75rem; color: var(--text3); margin-top: 4px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* WEIGHT TRACKER */
+.weight-chart-wrap { height: 200px; position: relative; }
+.weight-log { margin-top: 1rem; }
+.weight-entry { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--bg2); font-size: 0.88rem; }
+.weight-val { font-weight: 600; font-size: 1rem; }
+.weight-diff.up { color: var(--danger); }
+.weight-diff.down { color: var(--success); }
+.weight-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1rem; }
+.stat-box { background: var(--bg2); border-radius: 10px; padding: 0.75rem; text-align: center; }
+.stat-val { font-size: 1.3rem; font-weight: 600; }
+.stat-lbl { font-size: 0.75rem; color: var(--text3); margin-top: 2px; }
+
+/* WISHLIST */
+.wish-item { display: flex; align-items: center; gap: 12px; padding: 0.8rem; border-bottom: 1px solid var(--bg2); }
+.wish-item:last-child { border-bottom: none; }
+.wish-emoji { font-size: 1.5rem; }
+.wish-info { flex: 1; }
+.wish-name { font-size: 0.9rem; font-weight: 500; }
+.wish-price { font-size: 0.8rem; color: var(--text2); }
+.wish-type { font-size: 0.72rem; padding: 2px 8px; border-radius: 20px; }
+.wish-need { background: #ffd6d6; color: #802020; }
+.wish-want { background: #d6e4ff; color: #204080; }
+.wish-check { color: var(--success); font-size: 1.1rem; cursor: pointer; }
+.wish-check.done { opacity: 0.4; }
+
+/* MONEY */
+.money-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
+.money-in { background: #e8ffe8; }
+.money-out { background: #ffe8e8; }
+.money-bal { background: #e8f0ff; }
+.money-entry { display: flex; align-items: center; gap: 10px; padding: 0.65rem 0; border-bottom: 1px solid var(--bg2); font-size: 0.88rem; }
+.money-entry:last-child { border-bottom: none; }
+.money-cat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.money-amount { font-weight: 600; margin-left: auto; }
+.money-amount.in { color: var(--success); }
+.money-amount.out { color: var(--danger); }
+.cat-colors { makan:'#e07', transport:'#07e' }
+
+/* MOOD */
+.mood-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+.mood-option { cursor: pointer; padding: 0.5rem 0.9rem; border-radius: 20px; border: 1.5px solid var(--border); font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: all 0.15s; }
+.mood-option:hover, .mood-option.selected { border-color: transparent; }
+.mood-happy.selected { background: #fffbe0; border-color: #f0c020; }
+.mood-great.selected { background: #e0ffe0; border-color: #40c040; }
+.mood-ok.selected { background: #e0f0ff; border-color: #4080c0; }
+.mood-sad.selected { background: #ffe8e0; border-color: #c05040; }
+.mood-bad.selected { background: #ffe0ee; border-color: #c04080; }
+.mood-log { display: flex; flex-direction: column; gap: 8px; margin-top: 1rem; }
+.mood-entry { display: flex; align-items: center; gap: 10px; padding: 0.6rem 0.75rem; background: var(--bg); border-radius: 8px; font-size: 0.88rem; }
+.mood-entry-date { color: var(--text3); font-size: 0.8rem; min-width: 80px; }
+
+/* BOOKS */
+.book-item { display: flex; gap: 12px; padding: 0.85rem; border-bottom: 1px solid var(--bg2); }
+.book-item:last-child { border-bottom: none; }
+.book-cover { width: 44px; height: 60px; border-radius: 4px; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+.book-info { flex: 1; }
+.book-title { font-weight: 500; font-size: 0.9rem; }
+.book-author { font-size: 0.8rem; color: var(--text3); }
+.book-status { font-size: 0.75rem; padding: 2px 8px; border-radius: 20px; margin-top: 4px; display: inline-block; }
+.status-reading { background: #e0f0ff; color: #204080; }
+.status-done { background: #e0ffe0; color: #206020; }
+.status-want { background: #fffbe0; color: #806020; }
+.book-rating { color: #f0c030; font-size: 0.85rem; margin-top: 2px; }
+.book-progress-wrap { margin-top: 6px; }
+
+/* DASHBOARD */
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 1.5rem; }
+.dash-widget { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; cursor: pointer; transition: all 0.15s; }
+.dash-widget:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.dash-widget-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+.dash-widget-title { font-size: 0.78rem; color: var(--text3); margin-bottom: 0.25rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.dash-widget-val { font-size: 1.2rem; font-weight: 600; }
+.dash-widget-sub { font-size: 0.78rem; color: var(--text3); margin-top: 2px; }
+.dash-greet { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-bottom: 0.25rem; }
+.dash-date { color: var(--text2); font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+/* CUSTOM FEATURES */
+.custom-features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 12px; }
+.custom-feature-card { background: var(--card); border: 2px dashed var(--border); border-radius: var(--radius); padding: 1.25rem; text-align: center; cursor: pointer; transition: all 0.15s; }
+.custom-feature-card:hover { border-color: var(--accent-ami); background: var(--bg2); }
+.add-feature-btn { width: 100%; border: 2px dashed var(--border); background: none; border-radius: var(--radius); padding: 1.5rem; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--text2); font-family: inherit; font-size: 0.9rem; }
+.add-feature-btn:hover { border-color: var(--accent-ami); color: var(--accent-ami); background: var(--bg2); }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000;
+  display: none; align-items: center; justify-content: center; padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal { background: var(--card); border-radius: 16px; padding: 2rem; width: 500px; max-width: 96vw; max-height: 90vh; overflow-y: auto; }
+.modal-title { font-family: 'DM Serif Display', serif; font-size: 1.4rem; margin-bottom: 1.25rem; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.25rem; }
+
+/* RESPONSIVE */
+@media (max-width: 700px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; padding: 1rem; }
+  .hamburger { display: flex; }
+}
+.hamburger { display: none; position: fixed; top: 1rem; left: 1rem; z-index: 200; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px; cursor: pointer; align-items: center; justify-content: center; }
+.mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 90; }
+.mobile-overlay.open { display: block; }
+
+/* Accent per user */
+.user-ami .btn-primary, .user-ami .login-btn { background: var(--accent-ami); }
+.user-ami input:focus, .user-ami textarea:focus, .user-ami select:focus { border-color: var(--accent-ami); }
+.user-ami .nav-item.active { background: #fff5ef; color: var(--accent-ami); }
+.user-ami .habit-check.done { border-color: var(--accent-ami); background: #fbe8d8; color: var(--accent-ami); }
+.user-zahra .btn-primary, .user-zahra .login-btn { background: var(--accent-zahra); }
+.user-zahra input:focus, .user-zahra textarea:focus, .user-zahra select:focus { border-color: var(--accent-zahra); }
+.user-zahra .nav-item.active { background: #f5f2ff; color: var(--accent-zahra); }
+.user-zahra .habit-check.done { border-color: var(--accent-zahra); background: #ede9ff; color: var(--accent-zahra); }
+.user-zahra .progress-fill { background: var(--accent-zahra) !important; }
+.user-ami .progress-fill { background: var(--accent-ami) !important; }
+
+/* simple canvas chart */
+canvas { max-width: 100%; }
+
+.empty-state { text-align: center; padding: 2rem; color: var(--text3); font-size: 0.9rem; }
+.empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.tabs { display: flex; gap: 4px; margin-bottom: 1.25rem; background: var(--bg2); border-radius: 10px; padding: 4px; }
+.tab { flex: 1; padding: 0.5rem; border-radius: 7px; border: none; background: none; cursor: pointer; font-family: inherit; font-size: 0.85rem; font-weight: 500; color: var(--text2); transition: all 0.15s; }
+.tab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-title">My Planner ✦</div>
+    <div class="login-subtitle">Ruang personal untuk Ami & Zahra</div>
+    <div class="user-cards">
+      <div class="user-card ami" onclick="selectUser('ami')">
+        <div class="user-avatar">A</div>
+        <div class="user-name">Ami</div>
+      </div>
+      <div class="user-card zahra" onclick="selectUser('zahra')">
+        <div class="user-avatar">Z</div>
+        <div class="user-name">Zahra</div>
+      </div>
+    </div>
+    <div class="login-form">
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-pass" placeholder="Masukkan password..." onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="btn login-btn" id="login-btn" onclick="doLogin()">Masuk</button>
+      <div class="login-error" id="login-error"></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="mobile-overlay" id="mobile-overlay" onclick="closeSidebar()"></div>
+  <button class="hamburger" id="hamburger" onclick="toggleSidebar()">☰</button>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">My Planner ✦</div>
+      <div class="sidebar-user" id="sidebar-user-info">
+        <div class="sidebar-avatar" id="sidebar-avatar"></div>
+        <div>
+          <div style="font-weight:600;font-size:0.9rem;" id="sidebar-username"></div>
+          <div style="font-size:0.75rem;color:var(--text3)">Personal Space</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Beranda</div>
+      <div class="nav-item active" data-page="dashboard" onclick="goPage('dashboard',this)">
+        <span class="nav-icon">🏠</span> Dashboard
+      </div>
+      <div class="nav-section">Jadwal & Rencana</div>
+      <div class="nav-item" data-page="habit" onclick="goPage('habit',this)">
+        <span class="nav-icon">✅</span> Jadwal Harian
+      </div>
+      <div class="nav-item" data-page="monthly" onclick="goPage('monthly',this)">
+        <span class="nav-icon">📅</span> Rencana Bulanan
+      </div>
+      <div class="nav-item" data-page="yearly" onclick="goPage('yearly',this)">
+        <span class="nav-icon">🗓️</span> Rencana Tahunan
+      </div>
+      <div class="nav-item" data-page="todo" onclick="goPage('todo',this)">
+        <span class="nav-icon">📝</span> To Do List
+      </div>
+      <div class="nav-section">Catatan & Hidup</div>
+      <div class="nav-item" data-page="diary" onclick="goPage('diary',this)">
+        <span class="nav-icon">📖</span> Diary
+      </div>
+      <div class="nav-item" data-page="gallery" onclick="goPage('gallery',this)">
+        <span class="nav-icon">🖼️</span> Gallery Foto
+      </div>
+      <div class="nav-section">Tracker</div>
+      <div class="nav-item" data-page="weight" onclick="goPage('weight',this)">
+        <span class="nav-icon">⚖️</span> Berat Badan
+      </div>
+      <div class="nav-item" data-page="money" onclick="goPage('money',this)">
+        <span class="nav-icon">💰</span> Money Tracker
+      </div>
+      <div class="nav-item" data-page="mood" onclick="goPage('mood',this)">
+        <span class="nav-icon">🌈</span> Mood Tracker
+      </div>
+      <div class="nav-item" data-page="books" onclick="goPage('books',this)">
+        <span class="nav-icon">📚</span> Tracker Buku
+      </div>
+      <div class="nav-section">Lainnya</div>
+      <div class="nav-item" data-page="wishlist" onclick="goPage('wishlist',this)">
+        <span class="nav-icon">🛒</span> Keinginan & Kebutuhan
+      </div>
+      <div class="nav-item" data-page="custom" onclick="goPage('custom',this)">
+        <span class="nav-icon">⚙️</span> Fitur Lainnya
+      </div>
+    </nav>
+    <button class="logout-btn" onclick="doLogout()">🚪 Keluar</button>
+  </div>
+
+  <main class="main">
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page active">
+      <div class="page-header">
+        <div class="dash-greet" id="dash-greet"></div>
+        <div class="dash-date" id="dash-date"></div>
+      </div>
+      <div class="dash-grid" id="dash-grid"></div>
+      <div class="card">
+        <div class="card-title">📋 To Do Hari Ini</div>
+        <div id="dash-todos"></div>
+      </div>
+    </div>
+
+    <!-- HABIT / JADWAL HARIAN -->
+    <div id="page-habit" class="page">
+      <div class="page-header">
+        <div class="page-title">Jadwal Harian</div>
+        <div class="page-desc">Centang kegiatan harian kamu setiap hari</div>
+      </div>
+      <div class="month-nav">
+        <button class="btn btn-secondary btn-sm" onclick="changeMonth(-1)">‹ Prev</button>
+        <h2 id="month-label"></h2>
+        <button class="btn btn-secondary btn-sm" onclick="changeMonth(1)">Next ›</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Tambah Kegiatan</div>
+        <div class="habit-add">
+          <input type="text" id="habit-input" placeholder="Contoh: Olahraga, Minum air, Membaca..." onkeydown="if(event.key==='Enter')addHabit()">
+          <input type="text" id="habit-emoji" placeholder="🔥" style="width:60px">
+          <button class="btn btn-primary" onclick="addHabit()">+ Tambah</button>
+        </div>
+      </div>
+      <div class="card" style="overflow:hidden">
+        <div class="habit-grid-wrap">
+          <div id="habit-grid-container"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MONTHLY PLAN -->
+    <div id="page-monthly" class="page">
+      <div class="page-header">
+        <div class="page-title">Rencana Bulanan</div>
+        <div class="page-desc">Tulis dan pantau rencana tiap bulan</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap">
+        <select id="monthly-year-sel" style="width:100px" onchange="renderMonthly()"></select>
+        <button class="btn btn-primary" onclick="openAddPlan()">+ Tambah Rencana</button>
+      </div>
+      <div class="plan-grid" id="monthly-grid"></div>
+    </div>
+
+    <!-- YEARLY PLAN -->
+    <div id="page-yearly" class="page">
+      <div class="page-header">
+        <div class="page-title">Rencana Tahunan</div>
+        <div class="page-desc">Mimpi dan target besar kamu dalam setahun</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap">
+        <select id="yearly-year-sel" style="width:100px" onchange="renderYearly()"></select>
+        <button class="btn btn-primary" onclick="openAddYearlyGoal()">+ Tambah Target</button>
+      </div>
+      <div id="yearly-grid"></div>
+    </div>
+
+    <!-- TODO -->
+    <div id="page-todo" class="page">
+      <div class="page-header">
+        <div class="page-title">To Do List</div>
+        <div class="page-desc">Daftar tugas yang perlu kamu selesaikan</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="openTodoModal()">+ Tambah Tugas</button>
+        <select id="todo-filter" onchange="renderTodo()" style="width:140px">
+          <option value="all">Semua</option>
+          <option value="active">Belum selesai</option>
+          <option value="done">Selesai</option>
+        </select>
+        <select id="todo-cat-filter" onchange="renderTodo()" style="width:140px">
+          <option value="all">Semua kategori</option>
+          <option value="personal">Personal</option>
+          <option value="work">Pekerjaan</option>
+          <option value="health">Kesehatan</option>
+        </select>
+      </div>
+      <div class="card" style="padding:0">
+        <div id="todo-list"></div>
+      </div>
+    </div>
+
+    <!-- DIARY -->
+    <div id="page-diary" class="page">
+      <div class="page-header">
+        <div class="page-title">Diary</div>
+        <div class="page-desc">Tulis cerita dan perasaanmu hari ini</div>
+      </div>
+      <button class="btn btn-primary" onclick="openDiaryModal()" style="margin-bottom:1.25rem">+ Tulis Diary</button>
+      <div class="diary-list" id="diary-list"></div>
+    </div>
+
+    <!-- GALLERY -->
+    <div id="page-gallery" class="page">
+      <div class="page-header">
+        <div class="page-title">Gallery Foto</div>
+        <div class="page-desc">Simpan momen-momen berhargamu di sini</div>
+      </div>
+      <div class="gallery-upload" onclick="document.getElementById('gallery-upload-input').click()" style="margin-bottom:1.25rem">
+        <div style="font-size:2rem;margin-bottom:0.5rem">📷</div>
+        <div style="font-weight:500">Klik untuk upload foto</div>
+        <div style="font-size:0.8rem;color:var(--text3);margin-top:4px">JPG, PNG, GIF • Tersimpan di browser</div>
+        <input type="file" id="gallery-upload-input" accept="image/*" multiple style="display:none" onchange="handleGalleryUpload(this)">
+      </div>
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+
+    <!-- WEIGHT -->
+    <div id="page-weight" class="page">
+      <div class="page-header">
+        <div class="page-title">Tracker Berat Badan</div>
+        <div class="page-desc">Pantau perkembangan berat badanmu</div>
+      </div>
+      <div class="weight-stats" id="weight-stats"></div>
+      <div class="card">
+        <div class="card-title">Grafik Berat Badan</div>
+        <canvas id="weight-chart" height="180"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-title">Catat Berat Badan</div>
+        <div class="form-row">
+          <div><label>Tanggal</label><input type="date" id="weight-date"></div>
+          <div><label>Berat (kg)</label><input type="number" id="weight-val-input" placeholder="65.5" step="0.1"></div>
+          <div><label>Catatan</label><input type="text" id="weight-note" placeholder="Opsional..."></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:0.75rem" onclick="addWeight()">+ Tambah</button>
+      </div>
+      <div class="card" style="padding:0">
+        <div style="padding:1rem 1.25rem;font-weight:600;font-size:0.9rem;border-bottom:1px solid var(--bg2)">Riwayat</div>
+        <div id="weight-log"></div>
+      </div>
+    </div>
+
+    <!-- MONEY -->
+    <div id="page-money" class="page">
+      <div class="page-header">
+        <div class="page-title">Money Tracker</div>
+        <div class="page-desc">Catat pemasukan dan pengeluaran harianmu</div>
+      </div>
+      <div class="money-stats" id="money-stats"></div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
+        <select id="money-month-filter" onchange="renderMoney()" style="width:160px"></select>
+        <button class="btn btn-primary" onclick="openMoneyModal()">+ Catat Transaksi</button>
+      </div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">Grafik Bulanan</div>
+        <canvas id="money-chart" height="140"></canvas>
+      </div>
+      <div class="card" style="padding:0">
+        <div style="padding:1rem 1.25rem;font-weight:600;font-size:0.9rem;border-bottom:1px solid var(--bg2)">Transaksi</div>
+        <div id="money-list"></div>
+      </div>
+    </div>
+
+    <!-- MOOD -->
+    <div id="page-mood" class="page">
+      <div class="page-header">
+        <div class="page-title">Mood Tracker</div>
+        <div class="page-desc">Bagaimana perasaanmu hari ini?</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Catat Mood Hari Ini</div>
+        <div class="mood-grid" id="mood-options">
+          <div class="mood-option mood-great" onclick="selectMood('😄 Senang banget')" data-mood="😄 Senang banget">😄 Senang banget</div>
+          <div class="mood-option mood-happy" onclick="selectMood('🙂 Oke')" data-mood="🙂 Oke">🙂 Oke</div>
+          <div class="mood-option mood-ok" onclick="selectMood('😐 Biasa aja')" data-mood="😐 Biasa aja">😐 Biasa aja</div>
+          <div class="mood-option mood-sad" onclick="selectMood('😔 Sedih')" data-mood="😔 Sedih">😔 Sedih</div>
+          <div class="mood-option mood-bad" onclick="selectMood('😤 Kesal')" data-mood="😤 Kesal">😤 Kesal</div>
+          <div class="mood-option" onclick="selectMood('😰 Cemas')" data-mood="😰 Cemas">😰 Cemas</div>
+          <div class="mood-option" onclick="selectMood('😴 Lelah')" data-mood="😴 Lelah">😴 Lelah</div>
+          <div class="mood-option" onclick="selectMood('🤩 Bersemangat')" data-mood="🤩 Bersemangat">🤩 Bersemangat</div>
+        </div>
+        <div style="margin-top:1rem;display:flex;gap:8px">
+          <input type="date" id="mood-date" style="width:auto">
+          <input type="text" id="mood-note" placeholder="Cerita sedikit... (opsional)" style="flex:1">
+          <button class="btn btn-primary" onclick="saveMood()">Simpan</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Grafik Mood</div>
+        <canvas id="mood-chart" height="120"></canvas>
+      </div>
+      <div class="mood-log" id="mood-log"></div>
+    </div>
+
+    <!-- BOOKS -->
+    <div id="page-books" class="page">
+      <div class="page-header">
+        <div class="page-title">Tracker Buku</div>
+        <div class="page-desc">Pantau buku yang kamu baca atau ingin dibaca</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="openBookModal()">+ Tambah Buku</button>
+        <div class="tabs" style="flex:1;min-width:200px">
+          <button class="tab active" onclick="filterBooks('all',this)">Semua</button>
+          <button class="tab" onclick="filterBooks('reading',this)">Dibaca</button>
+          <button class="tab" onclick="filterBooks('done',this)">Selesai</button>
+          <button class="tab" onclick="filterBooks('want',this)">Ingin baca</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div id="books-list"></div>
+      </div>
+    </div>
+
+    <!-- WISHLIST -->
+    <div id="page-wishlist" class="page">
+      <div class="page-header">
+        <div class="page-title">Keinginan & Kebutuhan</div>
+        <div class="page-desc">Daftar hal yang ingin kamu beli atau miliki</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="openWishModal()">+ Tambah</button>
+        <div class="tabs">
+          <button class="tab active" onclick="filterWish('all',this)">Semua</button>
+          <button class="tab" onclick="filterWish('need',this)">Kebutuhan</button>
+          <button class="tab" onclick="filterWish('want',this)">Keinginan</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div id="wish-list"></div>
+      </div>
+    </div>
+
+    <!-- CUSTOM -->
+    <div id="page-custom" class="page">
+      <div class="page-header">
+        <div class="page-title">Fitur Lainnya</div>
+        <div class="page-desc">Tambahkan fitur khusus sesuai kebutuhanmu</div>
+      </div>
+      <button class="add-feature-btn" onclick="openCustomFeatureModal()" style="margin-bottom:1.25rem">
+        <span style="font-size:1.3rem">＋</span> Tambah Fitur Baru
+      </button>
+      <div class="custom-features-grid" id="custom-features-grid"></div>
+      <div class="card" id="custom-notes-card" style="margin-top:1.25rem">
+        <div class="card-title">📌 Catatan Bebas</div>
+        <textarea id="custom-notes" placeholder="Tulis apa saja di sini..." style="min-height:150px;width:100%" oninput="saveCustomNotes()"></textarea>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script>
+// ====== DATA & STATE ======
+const USERS = { ami: 'ami123', zahra: 'zahra123' };
+let currentUser = null;
+let currentHabitMonth = new Date().getMonth();
+let currentHabitYear = new Date().getFullYear();
+let selectedMoodValue = null;
+let booksFilter = 'all';
+let wishFilter = 'all';
+
+function key(k) { return `planner_${currentUser}_${k}`; }
+function load(k, def=[]) { try { const v = localStorage.getItem(key(k)); return v ? JSON.parse(v) : def; } catch { return def; } }
+function save(k, v) { localStorage.setItem(key(k), JSON.stringify(v)); }
+
+// ====== AUTH ======
+let selectedUserLogin = 'ami';
+function selectUser(u) {
+  selectedUserLogin = u;
+  document.querySelectorAll('.user-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector('.user-card.' + u).classList.add('selected');
+  document.getElementById('login-btn').className = 'btn login-btn' + (u === 'zahra' ? ' zahra-btn' : '');
+}
+selectUser('ami');
+function doLogin() {
+  const pass = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-error');
+  if (USERS[selectedUserLogin] !== pass) { err.textContent = 'Password salah. Coba lagi!'; return; }
+  err.textContent = '';
+  currentUser = selectedUserLogin;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  const appEl = document.getElementById('app');
+  appEl.className = 'user-' + currentUser;
+  const acc = currentUser === 'ami' ? '#c4784a' : '#7b6ea0';
+  document.getElementById('sidebar-avatar').style.cssText = `background:${currentUser==='ami'?'#fbe8d8':'#ede9ff'};color:${acc};width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700`;
+  document.getElementById('sidebar-avatar').textContent = currentUser === 'ami' ? 'A' : 'Z';
+  document.getElementById('sidebar-username').textContent = currentUser === 'ami' ? 'Ami' : 'Zahra';
+  initAll();
+}
+function doLogout() {
+  currentUser = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-pass').value = '';
+}
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('mobile-overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('mobile-overlay').classList.remove('open');
+}
+
+// ====== NAVIGATION ======
+function goPage(p, el) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  if (el) el.classList.add('active');
+  closeSidebar();
+  if (p === 'habit') renderHabit();
+  if (p === 'monthly') renderMonthly();
+  if (p === 'yearly') renderYearly();
+  if (p === 'todo') renderTodo();
+  if (p === 'diary') renderDiary();
+  if (p === 'gallery') renderGallery();
+  if (p === 'weight') renderWeight();
+  if (p === 'money') renderMoney();
+  if (p === 'mood') renderMood();
+  if (p === 'books') renderBooks();
+  if (p === 'wishlist') renderWishlist();
+  if (p === 'custom') renderCustom();
+  if (p === 'dashboard') renderDashboard();
+}
+
+// ====== INIT ======
+function initAll() {
+  // pre-fill year selects
+  const yr = new Date().getFullYear();
+  ['monthly-year-sel','yearly-year-sel'].forEach(id => {
+    const sel = document.getElementById(id);
+    sel.innerHTML = '';
+    for (let y = yr-1; y <= yr+3; y++) sel.innerHTML += `<option value="${y}" ${y===yr?'selected':''}>${y}</option>`;
+  });
+  // money month filter
+  const mf = document.getElementById('money-month-filter');
+  mf.innerHTML = '';
+  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const now = new Date();
+  for (let m = 0; m < 12; m++) mf.innerHTML += `<option value="${now.getFullYear()}-${String(m+1).padStart(2,'0')}" ${m===now.getMonth()?'selected':''}>${months[m]} ${now.getFullYear()}</option>`;
+  // set today for inputs
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('weight-date').value = today;
+  document.getElementById('mood-date').value = today;
+  renderDashboard();
+  renderHabit();
+  loadCustomNotes();
+}
+
+// ====== DASHBOARD ======
+function renderDashboard() {
+  const d = new Date();
+  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const name = currentUser === 'ami' ? 'Ami' : 'Zahra';
+  const h = d.getHours();
+  const greet = h < 12 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 18 ? 'Selamat sore' : 'Selamat malam';
+  document.getElementById('dash-greet').textContent = `${greet}, ${name}! ✨`;
+  document.getElementById('dash-date').textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  
+  const todos = load('todos');
+  const pending = todos.filter(t => !t.done).length;
+  const habits = load('habits');
+  const todayKey = d.toISOString().split('T')[0];
+  const mm = String(d.getMonth()+1).padStart(2,'0'); const yy = d.getFullYear(); const dd = String(d.getDate()).padStart(2,'0');
+  const habitsDone = habits.filter(h => load(`habit_checks_${yy}_${d.getMonth()}`)?.[h.id]?.[dd]).length;
+  const moods = load('moods');
+  const todayMood = moods.find(m => m.date === todayKey);
+  const weights = load('weights').sort((a,b) => new Date(b.date)-new Date(a.date));
+  const latestW = weights[0];
+  const books = load('books');
+  const reading = books.filter(b => b.status === 'reading').length;
+  const money = load('money');
+  const monMonthKey = `${yy}-${mm}`;
+  const monthMoney = money.filter(m => m.date.startsWith(monMonthKey));
+  const expense = monthMoney.filter(m => m.type === 'out').reduce((s,m) => s + m.amount, 0);
+
+  document.getElementById('dash-grid').innerHTML = `
+    <div class="dash-widget" onclick="goPage('habit',document.querySelector('[data-page=habit]'))">
+      <div class="dash-widget-icon">✅</div>
+      <div class="dash-widget-title">Habit Hari Ini</div>
+      <div class="dash-widget-val">${habitsDone}/${habits.length}</div>
+      <div class="dash-widget-sub">kegiatan selesai</div>
+    </div>
+    <div class="dash-widget" onclick="goPage('todo',document.querySelector('[data-page=todo]'))">
+      <div class="dash-widget-icon">📝</div>
+      <div class="dash-widget-title">To Do</div>
+      <div class="dash-widget-val">${pending}</div>
+      <div class="dash-widget-sub">tugas menunggu</div>
+    </div>
+    <div class="dash-widget" onclick="goPage('mood',document.querySelector('[data-page=mood]'))">
+      <div class="dash-widget-icon">🌈</div>
+      <div class="dash-widget-title">Mood Hari Ini</div>
+      <div class="dash-widget-val" style="font-size:1rem">${todayMood ? todayMood.mood : '—'}</div>
+      <div class="dash-widget-sub">${todayMood ? 'sudah dicatat' : 'belum dicatat'}</div>
+    </div>
+    <div class="dash-widget" onclick="goPage('weight',document.querySelector('[data-page=weight]'))">
+      <div class="dash-widget-icon">⚖️</div>
+      <div class="dash-widget-title">Berat Badan</div>
+      <div class="dash-widget-val">${latestW ? latestW.weight + ' kg' : '—'}</div>
+      <div class="dash-widget-sub">${latestW ? 'terakhir dicatat' : 'belum ada data'}</div>
+    </div>
+    <div class="dash-widget" onclick="goPage('books',document.querySelector('[data-page=books]'))">
+      <div class="dash-widget-icon">📚</div>
+      <div class="dash-widget-title">Sedang Dibaca</div>
+      <div class="dash-widget-val">${reading}</div>
+      <div class="dash-widget-sub">buku</div>
+    </div>
+    <div class="dash-widget" onclick="goPage('money',document.querySelector('[data-page=money]'))">
+      <div class="dash-widget-icon">💰</div>
+      <div class="dash-widget-title">Pengeluaran Bulan Ini</div>
+      <div class="dash-widget-val" style="font-size:0.95rem">Rp ${expense.toLocaleString('id')}</div>
+      <div class="dash-widget-sub">bulan ini</div>
+    </div>
+  `;
+  
+  // today's todos
+  const todayTodos = todos.filter(t => !t.done).slice(0,5);
+  const dtEl = document.getElementById('dash-todos');
+  if (!todayTodos.length) dtEl.innerHTML = '<div class="empty-state"><div>🎉</div>Semua tugas sudah selesai!</div>';
+  else dtEl.innerHTML = todayTodos.map(t => `<div class="todo-item"><input type="checkbox" onchange="toggleTodoDash('${t.id}')"><span class="todo-text">${t.text}</span><span class="todo-priority p-${t.priority}">${t.priority==='high'?'Tinggi':t.priority==='med'?'Sedang':'Rendah'}</span></div>`).join('');
+}
+function toggleTodoDash(id) {
+  let todos = load('todos');
+  const t = todos.find(x => x.id === id);
+  if (t) { t.done = !t.done; save('todos', todos); }
+  renderDashboard();
+}
+
+// ====== HABIT ======
+function renderHabit() {
+  const d = new Date(currentHabitYear, currentHabitMonth, 1);
+  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  document.getElementById('month-label').textContent = `${months[currentHabitMonth]} ${currentHabitYear}`;
+  const daysInMonth = new Date(currentHabitYear, currentHabitMonth+1, 0).getDate();
+  const habits = load('habits');
+  const checksKey = `habit_checks_${currentHabitYear}_${currentHabitMonth}`;
+  const checks = load(checksKey, {});
+  const container = document.getElementById('habit-grid-container');
+  if (!habits.length) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div>Belum ada kegiatan. Tambahkan dulu!</div>'; return; }
+  const cols = habits.length > 0 ? `80px repeat(${daysInMonth}, minmax(22px,1fr))` : '80px';
+  let html = `<div class="habit-header-row" style="grid-template-columns:${cols}">`;
+  html += `<div class="habit-name-cell" style="font-size:0.75rem;color:var(--text3)">Kegiatan</div>`;
+  for (let day = 1; day <= daysInMonth; day++) html += `<div class="day-num">${day}</div>`;
+  html += '</div>';
+  habits.forEach(h => {
+    const doneCount = Object.values(checks[h.id]||{}).filter(Boolean).length;
+    const pct = Math.round(doneCount/daysInMonth*100);
+    html += `<div class="habit-row" style="grid-template-columns:${cols}">`;
+    html += `<div class="habit-name-cell" title="${h.name}"><div>${h.emoji||'•'} ${h.name}</div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dd = String(day).padStart(2,'0');
+      const done = checks[h.id]?.[dd];
+      html += `<div class="habit-check ${done?'done':''}" onclick="toggleHabit('${h.id}','${dd}')">${done?'✓':''}</div>`;
+    }
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+function toggleHabit(hid, dd) {
+  const checksKey = `habit_checks_${currentHabitYear}_${currentHabitMonth}`;
+  const checks = load(checksKey, {});
+  if (!checks[hid]) checks[hid] = {};
+  checks[hid][dd] = !checks[hid][dd];
+  save(checksKey, checks);
+  renderHabit();
+}
+function addHabit() {
+  const name = document.getElementById('habit-input').value.trim();
+  const emoji = document.getElementById('habit-emoji').value.trim() || '🔥';
+  if (!name) return;
+  const habits = load('habits');
+  habits.push({ id: Date.now().toString(), name, emoji });
+  save('habits', habits);
+  document.getElementById('habit-input').value = '';
+  document.getElementById('habit-emoji').value = '';
+  renderHabit();
+}
+function changeMonth(dir) {
+  currentHabitMonth += dir;
+  if (currentHabitMonth < 0) { currentHabitMonth = 11; currentHabitYear--; }
+  if (currentHabitMonth > 11) { currentHabitMonth = 0; currentHabitYear++; }
+  renderHabit();
+}
+
+// ====== MONTHLY PLAN ======
+const MONTH_NAMES = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+function renderMonthly() {
+  const year = parseInt(document.getElementById('monthly-year-sel').value);
+  const plans = load('monthly_plans');
+  const grid = document.getElementById('monthly-grid');
+  grid.innerHTML = MONTH_NAMES.map((m, mi) => {
+    const monthPlans = plans.filter(p => p.year === year && p.month === mi);
+    const items = monthPlans.map(p => `<div class="plan-item">
+      <input type="checkbox" ${p.done?'checked':''} onchange="togglePlan('${p.id}','monthly')" accent-color="red">
+      <span class="plan-item-text ${p.done?'done':''}">${p.text}</span>
+      <button onclick="deletePlan('${p.id}','monthly')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.8rem">✕</button>
+    </div>`).join('');
+    return `<div class="plan-card">
+      <h3>${m} <button onclick="openAddPlan(${year},${mi})" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:1.1rem">+</button></h3>
+      ${items || '<div style="color:var(--text3);font-size:0.82rem">Belum ada rencana</div>'}
+    </div>`;
+  }).join('');
+}
+function openAddPlan(yr, mo) {
+  const year = yr !== undefined ? yr : parseInt(document.getElementById('monthly-year-sel').value);
+  const month = mo !== undefined ? mo : new Date().getMonth();
+  openModal(`<div class="modal-title">Tambah Rencana</div>
+    <div class="form-group"><label>Bulan</label><select id="m-mo" style="width:100%">${MONTH_NAMES.map((m,i)=>`<option value="${i}" ${i===month?'selected':''}>${m}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Rencana</label><input type="text" id="m-text" placeholder="Contoh: Liburan ke Bali..."></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="savePlan(${year})">Simpan</button></div>`);
+  setTimeout(()=>document.getElementById('m-text').focus(),100);
+}
+function savePlan(year) {
+  const mo = parseInt(document.getElementById('m-mo').value);
+  const text = document.getElementById('m-text').value.trim();
+  if (!text) return;
+  const plans = load('monthly_plans');
+  plans.push({ id: Date.now().toString(), year, month: mo, text, done: false });
+  save('monthly_plans', plans);
+  closeModal();
+  renderMonthly();
+}
+function togglePlan(id, type) {
+  const plans = load(type+'_plans');
+  const p = plans.find(x => x.id === id);
+  if (p) { p.done = !p.done; save(type+'_plans', plans); }
+  if (type === 'monthly') renderMonthly(); else renderYearly();
+}
+function deletePlan(id, type) {
+  let plans = load(type+'_plans');
+  save(type+'_plans', plans.filter(x => x.id !== id));
+  if (type === 'monthly') renderMonthly(); else renderYearly();
+}
+
+// ====== YEARLY PLAN ======
+const CATEGORIES = ['Karir & Pendidikan','Kesehatan & Kebugaran','Keuangan','Hubungan & Keluarga','Hobi & Hiburan','Perjalanan','Spiritual','Lainnya'];
+function renderYearly() {
+  const year = parseInt(document.getElementById('yearly-year-sel').value);
+  const goals = load('yearly_plans').filter(g => g.year === year);
+  const grid = document.getElementById('yearly-grid');
+  const byCat = {};
+  CATEGORIES.forEach(c => { byCat[c] = goals.filter(g => g.category === c); });
+  grid.innerHTML = CATEGORIES.map(cat => {
+    const items = byCat[cat];
+    if (!items.length && goals.length > 0) return '';
+    return `<div class="card" style="margin-bottom:0.75rem">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+        ${cat} <button onclick="openAddYearlyGoal(${year},'${cat}')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:1.1rem">+</button>
+      </div>
+      ${items.length ? items.map(g => `<div class="plan-item">
+        <input type="checkbox" ${g.done?'checked':''} onchange="togglePlan('${g.id}','yearly')">
+        <span class="plan-item-text ${g.done?'done':''}">${g.text}</span>
+        <button onclick="deletePlan('${g.id}','yearly')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.8rem">✕</button>
+      </div>`).join('') : '<div style="color:var(--text3);font-size:0.82rem">Belum ada target</div>'}
+    </div>`;
+  }).join('');
+}
+function openAddYearlyGoal(yr, cat) {
+  const year = yr || parseInt(document.getElementById('yearly-year-sel').value);
+  openModal(`<div class="modal-title">Tambah Target Tahunan</div>
+    <div class="form-group"><label>Kategori</label><select id="y-cat" style="width:100%">${CATEGORIES.map(c=>`<option value="${c}" ${c===cat?'selected':''}>${c}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Target</label><input type="text" id="y-text" placeholder="Contoh: Naik jabatan, Beli motor..."></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveYearly(${year})">Simpan</button></div>`);
+  setTimeout(()=>document.getElementById('y-text').focus(),100);
+}
+function saveYearly(year) {
+  const cat = document.getElementById('y-cat').value;
+  const text = document.getElementById('y-text').value.trim();
+  if (!text) return;
+  const goals = load('yearly_plans');
+  goals.push({ id: Date.now().toString(), year, category: cat, text, done: false });
+  save('yearly_plans', goals);
+  closeModal();
+  renderYearly();
+}
+
+// ====== TODO ======
+function renderTodo() {
+  let todos = load('todos');
+  const filt = document.getElementById('todo-filter').value;
+  const catF = document.getElementById('todo-cat-filter').value;
+  if (filt === 'active') todos = todos.filter(t => !t.done);
+  if (filt === 'done') todos = todos.filter(t => t.done);
+  if (catF !== 'all') todos = todos.filter(t => t.category === catF);
+  const list = document.getElementById('todo-list');
+  if (!todos.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div>Tidak ada tugas ditemukan</div>'; return; }
+  list.innerHTML = todos.map(t => `<div class="todo-item">
+    <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo('${t.id}')">
+    <span class="todo-text ${t.done?'done':''}">${t.text}</span>
+    <span class="todo-cat badge-${t.category}">${t.category==='personal'?'Personal':t.category==='work'?'Kerja':'Kesehatan'}</span>
+    <span class="todo-priority p-${t.priority}">${t.priority==='high'?'Tinggi':t.priority==='med'?'Sedang':'Rendah'}</span>
+    <button onclick="deleteTodo('${t.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.9rem">✕</button>
+  </div>`).join('');
+}
+function openTodoModal() {
+  openModal(`<div class="modal-title">Tambah Tugas</div>
+    <div class="form-group"><label>Tugas</label><input type="text" id="td-text" placeholder="Apa yang perlu dilakukan?"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Kategori</label><select id="td-cat"><option value="personal">Personal</option><option value="work">Pekerjaan</option><option value="health">Kesehatan</option></select></div>
+      <div class="form-group"><label>Prioritas</label><select id="td-pri"><option value="high">Tinggi</option><option value="med">Sedang</option><option value="low">Rendah</option></select></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveTodo()">Tambah</button></div>`);
+  setTimeout(()=>document.getElementById('td-text').focus(),100);
+}
+function saveTodo() {
+  const text = document.getElementById('td-text').value.trim();
+  if (!text) return;
+  const todos = load('todos');
+  todos.unshift({ id: Date.now().toString(), text, category: document.getElementById('td-cat').value, priority: document.getElementById('td-pri').value, done: false, created: new Date().toISOString() });
+  save('todos', todos);
+  closeModal();
+  renderTodo();
+}
+function toggleTodo(id) {
+  let todos = load('todos');
+  const t = todos.find(x => x.id === id);
+  if (t) { t.done = !t.done; save('todos', todos); renderTodo(); }
+}
+function deleteTodo(id) {
+  save('todos', load('todos').filter(x => x.id !== id));
+  renderTodo();
+}
+
+// ====== DIARY ======
+function renderDiary() {
+  const diaries = load('diaries').sort((a,b) => new Date(b.date)-new Date(a.date));
+  const list = document.getElementById('diary-list');
+  if (!diaries.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📖</div>Belum ada diary. Tulis sekarang!</div>'; return; }
+  list.innerHTML = diaries.map(d => `<div class="diary-card">
+    <div class="diary-date">${new Date(d.date).toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
+    <div class="diary-title-text">${d.title}</div>
+    <div class="diary-body">${d.body}</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem">
+      <span class="diary-mood-badge">${d.mood || ''}</span>
+      <div class="diary-actions">
+        <button onclick="editDiary('${d.id}')" class="btn btn-secondary btn-sm">Edit</button>
+        <button onclick="deleteDiary('${d.id}')" class="btn btn-secondary btn-sm">Hapus</button>
+      </div>
+    </div>
+  </div>`).join('');
+}
+function openDiaryModal(id) {
+  const diaries = load('diaries');
+  const ex = id ? diaries.find(d => d.id === id) : null;
+  openModal(`<div class="modal-title">${ex ? 'Edit' : 'Tulis'} Diary</div>
+    <div class="form-group"><label>Tanggal</label><input type="date" id="dy-date" value="${ex?.date||new Date().toISOString().split('T')[0]}"></div>
+    <div class="form-group"><label>Judul</label><input type="text" id="dy-title" placeholder="Judul hari ini..." value="${ex?.title||''}"></div>
+    <div class="form-group"><label>Cerita</label><textarea id="dy-body" style="min-height:140px" placeholder="Tulis perasaan dan ceritamu...">${ex?.body||''}</textarea></div>
+    <div class="form-group"><label>Mood</label><input type="text" id="dy-mood" placeholder="😊 Senang, 😢 Sedih..." value="${ex?.mood||''}"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveDiary('${id||''}')">Simpan</button></div>`);
+  setTimeout(()=>document.getElementById('dy-title').focus(),100);
+}
+function editDiary(id) { openDiaryModal(id); }
+function saveDiary(id) {
+  const date = document.getElementById('dy-date').value;
+  const title = document.getElementById('dy-title').value.trim() || 'Tanpa judul';
+  const body = document.getElementById('dy-body').value.trim();
+  if (!body) return;
+  let diaries = load('diaries');
+  if (id) {
+    const d = diaries.find(x => x.id === id);
+    if (d) Object.assign(d, { date, title, body, mood: document.getElementById('dy-mood').value });
+  } else {
+    diaries.unshift({ id: Date.now().toString(), date, title, body, mood: document.getElementById('dy-mood').value });
+  }
+  save('diaries', diaries);
+  closeModal();
+  renderDiary();
+}
+function deleteDiary(id) {
+  if (!confirm('Hapus diary ini?')) return;
+  save('diaries', load('diaries').filter(x => x.id !== id));
+  renderDiary();
+}
+
+// ====== GALLERY ======
+function handleGalleryUpload(input) {
+  const files = Array.from(input.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const gallery = load('gallery');
+      gallery.push({ id: Date.now().toString() + Math.random(), src: e.target.result, caption: file.name.replace(/\.[^.]+$/,''), date: new Date().toISOString().split('T')[0] });
+      save('gallery', gallery);
+      renderGallery();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+function renderGallery() {
+  const gallery = load('gallery');
+  const grid = document.getElementById('gallery-grid');
+  if (!gallery.length) { grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🖼️</div>Belum ada foto. Upload sekarang!</div>'; return; }
+  grid.innerHTML = gallery.map(g => `<div>
+    <div class="gallery-item" style="background:#f0e8dc">
+      <img src="${g.src}" alt="${g.caption}" loading="lazy">
+      <div class="gallery-item-overlay"><button onclick="deletePhoto('${g.id}')">🗑 Hapus</button></div>
+    </div>
+    <div class="gallery-caption">${g.caption}</div>
+  </div>`).join('');
+}
+function deletePhoto(id) {
+  if (!confirm('Hapus foto ini?')) return;
+  save('gallery', load('gallery').filter(x => x.id !== id));
+  renderGallery();
+}
+
+// ====== WEIGHT ======
+function renderWeight() {
+  const weights = load('weights').sort((a,b) => new Date(a.date)-new Date(b.date));
+  const stats = document.getElementById('weight-stats');
+  const current = weights[weights.length-1];
+  const first = weights[0];
+  const min = weights.length ? Math.min(...weights.map(w=>w.weight)) : null;
+  const max = weights.length ? Math.max(...weights.map(w=>w.weight)) : null;
+  stats.innerHTML = `
+    <div class="stat-box"><div class="stat-val">${current?current.weight+' kg':'—'}</div><div class="stat-lbl">Terkini</div></div>
+    <div class="stat-box"><div class="stat-val">${min?min+' kg':'—'}</div><div class="stat-lbl">Terendah</div></div>
+    <div class="stat-box"><div class="stat-val">${max?max+' kg':'—'}</div><div class="stat-lbl">Tertinggi</div></div>`;
+  const ctx = document.getElementById('weight-chart').getContext('2d');
+  drawLineChart(ctx, weights.map(w=>w.date.slice(5)), weights.map(w=>w.weight), '#c4784a');
+  const log = document.getElementById('weight-log');
+  const rev = [...weights].reverse().slice(0,20);
+  if (!rev.length) { log.innerHTML = '<div class="empty-state"><div class="empty-icon">⚖️</div>Belum ada data</div>'; return; }
+  log.innerHTML = rev.map((w,i) => {
+    const prev = rev[i+1];
+    const diff = prev ? (w.weight - prev.weight).toFixed(1) : null;
+    return `<div class="weight-entry">
+      <span>${new Date(w.date).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})}</span>
+      <span style="color:var(--text3);font-size:0.8rem">${w.note||''}</span>
+      <span class="weight-val">${w.weight} kg</span>
+      ${diff!==null ? `<span class="weight-diff ${diff>0?'up':'down'}">${diff>0?'+':''}${diff} kg</span>` : ''}
+      <button onclick="deleteWeight('${w.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3)">✕</button>
+    </div>`;
+  }).join('');
+}
+function addWeight() {
+  const d = document.getElementById('weight-date').value;
+  const v = parseFloat(document.getElementById('weight-val-input').value);
+  if (!d || isNaN(v)) return;
+  const weights = load('weights');
+  weights.push({ id: Date.now().toString(), date: d, weight: v, note: document.getElementById('weight-note').value });
+  save('weights', weights);
+  document.getElementById('weight-val-input').value = '';
+  document.getElementById('weight-note').value = '';
+  renderWeight();
+}
+function deleteWeight(id) {
+  save('weights', load('weights').filter(x => x.id !== id));
+  renderWeight();
+}
+
+// ====== MONEY ======
+function renderMoney() {
+  const monthKey = document.getElementById('money-month-filter').value;
+  const money = load('money').filter(m => m.date.startsWith(monthKey)).sort((a,b) => new Date(b.date)-new Date(a.date));
+  const income = money.filter(m=>m.type==='in').reduce((s,m)=>s+m.amount,0);
+  const expense = money.filter(m=>m.type==='out').reduce((s,m)=>s+m.amount,0);
+  const balance = income - expense;
+  document.getElementById('money-stats').innerHTML = `
+    <div class="stat-box money-in"><div class="stat-val" style="color:var(--success);font-size:0.95rem">Rp ${income.toLocaleString('id')}</div><div class="stat-lbl">Pemasukan</div></div>
+    <div class="stat-box money-out"><div class="stat-val" style="color:var(--danger);font-size:0.95rem">Rp ${expense.toLocaleString('id')}</div><div class="stat-lbl">Pengeluaran</div></div>
+    <div class="stat-box money-bal"><div class="stat-val" style="font-size:0.95rem;color:${balance>=0?'var(--success)':'var(--danger)'}">Rp ${balance.toLocaleString('id')}</div><div class="stat-lbl">Saldo</div></div>`;
+  // simple bar chart
+  const ctx = document.getElementById('money-chart').getContext('2d');
+  const catTotals = {};
+  money.filter(m=>m.type==='out').forEach(m => { catTotals[m.category] = (catTotals[m.category]||0) + m.amount; });
+  const cats = Object.keys(catTotals);
+  const vals = cats.map(c => catTotals[c]);
+  drawBarChart(ctx, cats, vals, '#c4784a');
+  const list = document.getElementById('money-list');
+  if (!money.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">💰</div>Belum ada transaksi</div>'; return; }
+  list.innerHTML = money.map(m => `<div class="money-entry">
+    <div class="money-cat-dot" style="background:${m.type==='in'?'#40a040':'#e04040'}"></div>
+    <div>
+      <div style="font-weight:500;font-size:0.88rem">${m.desc}</div>
+      <div style="font-size:0.75rem;color:var(--text3)">${new Date(m.date).toLocaleDateString('id-ID',{day:'numeric',month:'short'})} • ${m.category}</div>
+    </div>
+    <span class="money-amount ${m.type}">${m.type==='in'?'+':'-'}Rp ${m.amount.toLocaleString('id')}</span>
+    <button onclick="deleteMoney('${m.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3)">✕</button>
+  </div>`).join('');
+}
+function openMoneyModal() {
+  const today = new Date().toISOString().split('T')[0];
+  openModal(`<div class="modal-title">Catat Transaksi</div>
+    <div class="form-row">
+      <div class="form-group"><label>Tanggal</label><input type="date" id="mn-date" value="${today}"></div>
+      <div class="form-group"><label>Jenis</label><select id="mn-type"><option value="out">Pengeluaran</option><option value="in">Pemasukan</option></select></div>
+    </div>
+    <div class="form-group"><label>Keterangan</label><input type="text" id="mn-desc" placeholder="Contoh: Makan siang, Gaji..."></div>
+    <div class="form-row">
+      <div class="form-group"><label>Nominal (Rp)</label><input type="number" id="mn-amount" placeholder="50000"></div>
+      <div class="form-group"><label>Kategori</label><select id="mn-cat">
+        <option>Makan & Minum</option><option>Transport</option><option>Belanja</option><option>Hiburan</option><option>Kesehatan</option><option>Tagihan</option><option>Gaji</option><option>Lainnya</option>
+      </select></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveMoney()">Simpan</button></div>`);
+  setTimeout(()=>document.getElementById('mn-desc').focus(),100);
+}
+function saveMoney() {
+  const amount = parseFloat(document.getElementById('mn-amount').value);
+  const desc = document.getElementById('mn-desc').value.trim();
+  if (!desc || isNaN(amount)) return;
+  const money = load('money');
+  money.push({ id: Date.now().toString(), date: document.getElementById('mn-date').value, type: document.getElementById('mn-type').value, desc, amount, category: document.getElementById('mn-cat').value });
+  save('money', money);
+  closeModal();
+  renderMoney();
+}
+function deleteMoney(id) {
+  save('money', load('money').filter(x => x.id !== id));
+  renderMoney();
+}
+
+// ====== MOOD ======
+function selectMood(m) {
+  selectedMoodValue = m;
+  document.querySelectorAll('.mood-option').forEach(o => {
+    o.classList.remove('selected');
+    if (o.dataset.mood === m) o.classList.add('selected');
+  });
+}
+function saveMood() {
+  if (!selectedMoodValue) { alert('Pilih mood dulu!'); return; }
+  const date = document.getElementById('mood-date').value;
+  const note = document.getElementById('mood-note').value;
+  const moods = load('moods');
+  const existing = moods.findIndex(m => m.date === date);
+  const entry = { id: Date.now().toString(), date, mood: selectedMoodValue, note };
+  if (existing >= 0) moods[existing] = entry; else moods.push(entry);
+  save('moods', moods);
+  document.getElementById('mood-note').value = '';
+  selectedMoodValue = null;
+  document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
+  renderMood();
+}
+function renderMood() {
+  const moods = load('moods').sort((a,b) => new Date(b.date)-new Date(a.date));
+  const log = document.getElementById('mood-log');
+  log.innerHTML = moods.slice(0,20).map(m => `<div class="mood-entry">
+    <span class="mood-entry-date">${new Date(m.date).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</span>
+    <span style="font-size:1rem">${m.mood}</span>
+    <span style="color:var(--text3);font-size:0.8rem;flex:1">${m.note||''}</span>
+    <button onclick="deleteMood('${m.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3)">✕</button>
+  </div>`).join('') || '<div class="empty-state"><div class="empty-icon">🌈</div>Belum ada catatan mood</div>';
+  // mood chart
+  const last30 = moods.slice(0, 30).reverse();
+  const moodVals = {'😄 Senang banget':5,'🤩 Bersemangat':5,'🙂 Oke':4,'😐 Biasa aja':3,'😰 Cemas':2,'😴 Lelah':2,'😔 Sedih':1,'😤 Kesal':1};
+  const ctx = document.getElementById('mood-chart').getContext('2d');
+  drawLineChart(ctx, last30.map(m=>m.date.slice(5)), last30.map(m=>moodVals[m.mood]||3), '#7b6ea0', 1, 5);
+}
+function deleteMood(id) {
+  save('moods', load('moods').filter(x => x.id !== id));
+  renderMood();
+}
+
+// ====== BOOKS ======
+function renderBooks() {
+  let books = load('books');
+  if (booksFilter !== 'all') books = books.filter(b => b.status === booksFilter);
+  const list = document.getElementById('books-list');
+  if (!books.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📚</div>Belum ada buku</div>'; return; }
+  const statusLabel = {reading:'Sedang Dibaca',done:'Selesai',want:'Ingin Baca'};
+  list.innerHTML = books.map(b => `<div class="book-item">
+    <div class="book-cover">${b.emoji||'📗'}</div>
+    <div class="book-info">
+      <div class="book-title">${b.title}</div>
+      <div class="book-author">${b.author}</div>
+      <span class="book-status status-${b.status}">${statusLabel[b.status]}</span>
+      ${b.status==='reading'?`<div class="book-progress-wrap"><div style="font-size:0.75rem;color:var(--text3);margin-bottom:3px">Halaman ${b.currentPage||0}/${b.totalPages||'?'}</div><div class="progress-bar"><div class="progress-fill" style="width:${b.totalPages?(b.currentPage||0)/b.totalPages*100:0}%"></div></div></div>`:''}
+      ${b.status==='done'?`<div class="book-rating">${'★'.repeat(b.rating||0)}${'☆'.repeat(5-(b.rating||0))}</div>`:''}
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+      <button onclick="editBook('${b.id}')" class="btn btn-secondary btn-sm">Edit</button>
+      <button onclick="deleteBook('${b.id}')" class="btn btn-secondary btn-sm">Hapus</button>
+    </div>
+  </div>`).join('');
+}
+function filterBooks(f, el) {
+  booksFilter = f;
+  document.querySelectorAll('#page-books .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderBooks();
+}
+function openBookModal(id) {
+  const books = load('books');
+  const ex = id ? books.find(b => b.id === id) : null;
+  openModal(`<div class="modal-title">${ex?'Edit':'Tambah'} Buku</div>
+    <div class="form-group"><label>Judul Buku</label><input type="text" id="bk-title" placeholder="Judul buku..." value="${ex?.title||''}"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Penulis</label><input type="text" id="bk-author" placeholder="Nama penulis" value="${ex?.author||''}"></div>
+      <div class="form-group"><label>Emoji Cover</label><input type="text" id="bk-emoji" placeholder="📗" value="${ex?.emoji||''}" style="width:80px"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Status</label><select id="bk-status">
+        <option value="want" ${ex?.status==='want'?'selected':''}>Ingin Baca</option>
+        <option value="reading" ${ex?.status==='reading'?'selected':''}>Sedang Dibaca</option>
+        <option value="done" ${ex?.status==='done'?'selected':''}>Selesai</option>
+      </select></div>
+      <div class="form-group"><label>Total Halaman</label><input type="number" id="bk-total" placeholder="300" value="${ex?.totalPages||''}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Halaman Saat Ini</label><input type="number" id="bk-curr" placeholder="0" value="${ex?.currentPage||''}"></div>
+      <div class="form-group"><label>Rating (1-5)</label><input type="number" id="bk-rating" min="1" max="5" placeholder="5" value="${ex?.rating||''}"></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveBook('${id||''}')">Simpan</button></div>`);
+  setTimeout(()=>document.getElementById('bk-title').focus(),100);
+}
+function editBook(id) { openBookModal(id); }
+function saveBook(id) {
+  const title = document.getElementById('bk-title').value.trim();
+  if (!title) return;
+  let books = load('books');
+  const entry = { id: id||Date.now().toString(), title, author: document.getElementById('bk-author').value, emoji: document.getElementById('bk-emoji').value||'📗', status: document.getElementById('bk-status').value, totalPages: parseInt(document.getElementById('bk-total').value)||0, currentPage: parseInt(document.getElementById('bk-curr').value)||0, rating: parseInt(document.getElementById('bk-rating').value)||0 };
+  if (id) { const i = books.findIndex(b=>b.id===id); if(i>=0) books[i]=entry; } else books.unshift(entry);
+  save('books', books);
+  closeModal();
+  renderBooks();
+}
+function deleteBook(id) {
+  save('books', load('books').filter(x => x.id !== id));
+  renderBooks();
+}
+
+// ====== WISHLIST ======
+function renderWishlist() {
+  let items = load('wishlist');
+  if (wishFilter !== 'all') items = items.filter(w => w.type === wishFilter);
+  const list = document.getElementById('wish-list');
+  if (!items.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">🛒</div>Belum ada daftar</div>'; return; }
+  list.innerHTML = items.map(w => `<div class="wish-item">
+    <div class="wish-emoji">${w.emoji||'🛍️'}</div>
+    <div class="wish-info">
+      <div class="wish-name ${w.done?'done':''}" style="${w.done?'text-decoration:line-through;color:var(--text3)':''}">${w.name}</div>
+      <div class="wish-price">Rp ${(w.price||0).toLocaleString('id')} • <span class="wish-type wish-${w.type}">${w.type==='need'?'Kebutuhan':'Keinginan'}</span></div>
+      ${w.note?`<div style="font-size:0.78rem;color:var(--text3)">${w.note}</div>`:''}
+    </div>
+    <span class="wish-check ${w.done?'done':''}" onclick="toggleWish('${w.id}')">${w.done?'✅':'○'}</span>
+    <button onclick="deleteWish('${w.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3)">✕</button>
+  </div>`).join('');
+}
+function filterWish(f, el) {
+  wishFilter = f;
+  document.querySelectorAll('#page-wishlist .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderWishlist();
+}
+function openWishModal() {
+  openModal(`<div class="modal-title">Tambah ke Daftar</div>
+    <div class="form-row">
+      <div class="form-group"><label>Nama Item</label><input type="text" id="ws-name" placeholder="Nama barang/keinginan..."></div>
+      <div class="form-group"><label>Emoji</label><input type="text" id="ws-emoji" placeholder="🛍️" style="width:70px"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Harga Estimasi (Rp)</label><input type="number" id="ws-price" placeholder="0"></div>
+      <div class="form-group"><label>Tipe</label><select id="ws-type"><option value="want">Keinginan</option><option value="need">Kebutuhan</option></select></div>
+    </div>
+    <div class="form-group"><label>Catatan</label><input type="text" id="ws-note" placeholder="Opsional..."></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveWish()">Simpan</button></div>`);
+  setTimeout(()=>document.getElementById('ws-name').focus(),100);
+}
+function saveWish() {
+  const name = document.getElementById('ws-name').value.trim();
+  if (!name) return;
+  const items = load('wishlist');
+  items.push({ id: Date.now().toString(), name, emoji: document.getElementById('ws-emoji').value||'🛍️', price: parseFloat(document.getElementById('ws-price').value)||0, type: document.getElementById('ws-type').value, note: document.getElementById('ws-note').value, done: false });
+  save('wishlist', items);
+  closeModal();
+  renderWishlist();
+}
+function toggleWish(id) {
+  let items = load('wishlist');
+  const w = items.find(x => x.id === id);
+  if (w) { w.done = !w.done; save('wishlist', items); renderWishlist(); }
+}
+function deleteWish(id) {
+  save('wishlist', load('wishlist').filter(x => x.id !== id));
+  renderWishlist();
+}
+
+// ====== CUSTOM FEATURES ======
+function renderCustom() {
+  const features = load('custom_features');
+  const grid = document.getElementById('custom-features-grid');
+  grid.innerHTML = features.map(f => `<div class="custom-feature-card" style="border-style:solid">
+    <div style="font-size:2rem;margin-bottom:0.5rem">${f.icon}</div>
+    <div style="font-weight:600;font-size:0.9rem">${f.name}</div>
+    <div style="color:var(--text3);font-size:0.78rem;margin-top:4px">${f.desc||''}</div>
+    <button onclick="deleteCustom('${f.id}')" style="margin-top:0.75rem;background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.8rem">Hapus</button>
+  </div>`).join('');
+}
+function openCustomFeatureModal() {
+  openModal(`<div class="modal-title">Tambah Fitur Baru</div>
+    <div class="form-group"><label>Nama Fitur</label><input type="text" id="cf-name" placeholder="Contoh: Jurnal Syukur, Sleep Tracker..."></div>
+    <div class="form-row">
+      <div class="form-group"><label>Icon/Emoji</label><input type="text" id="cf-icon" placeholder="📔" style="width:80px"></div>
+      <div class="form-group"><label>Deskripsi</label><input type="text" id="cf-desc" placeholder="Penjelasan singkat..."></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveCustomFeature()">Tambah</button></div>`);
+  setTimeout(()=>document.getElementById('cf-name').focus(),100);
+}
+function saveCustomFeature() {
+  const name = document.getElementById('cf-name').value.trim();
+  if (!name) return;
+  const features = load('custom_features');
+  features.push({ id: Date.now().toString(), name, icon: document.getElementById('cf-icon').value||'📌', desc: document.getElementById('cf-desc').value });
+  save('custom_features', features);
+  closeModal();
+  renderCustom();
+}
+function deleteCustom(id) {
+  save('custom_features', load('custom_features').filter(x => x.id !== id));
+  renderCustom();
+}
+function loadCustomNotes() {
+  document.getElementById('custom-notes').value = localStorage.getItem(key('custom_notes'))||'';
+}
+function saveCustomNotes() {
+  localStorage.setItem(key('custom_notes'), document.getElementById('custom-notes').value);
+}
+
+// ====== MODAL ======
+function openModal(html) {
+  document.getElementById('modal-content').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+// ====== CHARTS ======
+function drawLineChart(ctx, labels, data, color, yMin, yMax) {
+  const canvas = ctx.canvas;
+  const W = canvas.width = canvas.offsetWidth || 600;
+  const H = canvas.height = canvas.height || 180;
+  ctx.clearRect(0,0,W,H);
+  if (!data.length) return;
+  const pad = { t:20, r:20, b:30, l:40 };
+  const w = W - pad.l - pad.r;
+  const h = H - pad.t - pad.b;
+  const min = yMin !== undefined ? yMin : Math.min(...data) - 1;
+  const max = yMax !== undefined ? yMax : Math.max(...data) + 1;
+  const range = max - min || 1;
+  // grid
+  ctx.strokeStyle = '#e8e0d4'; ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.t + h - (i/4)*h;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l+w, y); ctx.stroke();
+    ctx.fillStyle = '#b0a89e'; ctx.font = '10px DM Sans,sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText((min + (i/4)*range).toFixed(1), pad.l-4, y+4);
+  }
+  // line
+  if (data.length < 2) {
+    const x = pad.l + w/2; const y = pad.t + h - ((data[0]-min)/range)*h;
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
+    return;
+  }
+  ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+  ctx.beginPath();
+  data.forEach((v,i) => {
+    const x = pad.l + (i/(data.length-1))*w;
+    const y = pad.t + h - ((v-min)/range)*h;
+    i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  // dots
+  data.forEach((v,i) => {
+    const x = pad.l + (i/(data.length-1))*w;
+    const y = pad.t + h - ((v-min)/range)*h;
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fill();
+  });
+  // labels (show max 8)
+  ctx.fillStyle = '#b0a89e'; ctx.font = '10px DM Sans,sans-serif'; ctx.textAlign = 'center';
+  const step = Math.ceil(labels.length/8);
+  labels.forEach((l,i) => { if(i%step===0){ const x = pad.l+(i/(data.length-1))*w; ctx.fillText(l, x, H-4); } });
+}
+function drawBarChart(ctx, labels, data, color) {
+  const canvas = ctx.canvas;
+  const W = canvas.width = canvas.offsetWidth || 600;
+  const H = canvas.height || 140;
+  ctx.clearRect(0,0,W,H);
+  if (!data.length) return;
+  const pad = {t:10,r:10,b:50,l:10};
+  const w = W - pad.l - pad.r;
+  const h = H - pad.t - pad.b;
+  const max = Math.max(...data,1);
+  const bw = Math.max(8, w/data.length - 4);
+  data.forEach((v,i) => {
+    const x = pad.l + i*(w/data.length) + (w/data.length-bw)/2;
+    const bh = (v/max)*h;
+    const y = pad.t + h - bh;
+    ctx.fillStyle = color + '99'; ctx.fillRect(x, y, bw, bh);
+    ctx.fillStyle = '#7a6e66'; ctx.font = '10px DM Sans,sans-serif'; ctx.textAlign = 'center';
+    const shortLabel = labels[i] ? labels[i].substring(0,10) : '';
+    ctx.fillText(shortLabel, x+bw/2, H-4);
+    if (v > 0) { ctx.fillStyle = '#2a2420'; ctx.fillText('Rp'+(v/1000).toFixed(0)+'K', x+bw/2, y-2); }
+  });
+}
+</script>
+</body>
+</html>
