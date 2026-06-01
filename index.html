@@ -150,7 +150,7 @@ label { font-size: 0.85rem; font-weight: 500; color: var(--text2); display: bloc
 .habit-grid { min-width: 700px; }
 .habit-header-row { display: grid; gap: 2px; align-items: center; }
 .habit-row { display: grid; gap: 2px; align-items: center; margin-bottom: 2px; }
-.habit-name-cell { padding: 0.4rem 0.6rem; font-size: 0.82rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.habit-name-cell { padding: 0.4rem 0.5rem; font-size: 0.82rem; font-weight: 500; min-width: 160px; }
 .day-num { text-align: center; font-size: 0.72rem; color: var(--text3); padding: 4px 0; }
 .habit-check {
   width: 100%; aspect-ratio: 1; border-radius: 4px; border: 1.5px solid var(--border);
@@ -197,7 +197,12 @@ label { font-size: 0.85rem; font-weight: 500; color: var(--text2); display: bloc
 .diary-mood-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.8rem; padding: 2px 10px; border-radius: 20px; background: var(--bg2); margin-top: 0.5rem; }
 .diary-actions { display: flex; gap: 6px; margin-top: 0.75rem; }
 
-/* GALLERY */
+.diary-photo { width: 100%; max-height: 260px; object-fit: cover; border-radius: 8px; margin-bottom: 0.75rem; display: block; }
+.mood-emoji-picker { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.mood-emoji-btn { font-size: 1.6rem; cursor: pointer; border: 2px solid transparent; border-radius: 10px; padding: 4px 6px; transition: all 0.15s; background: var(--bg2); line-height: 1; }
+.mood-emoji-btn:hover { transform: scale(1.15); }
+.mood-emoji-btn.selected { border-color: var(--accent-ami); background: #fff5ef; transform: scale(1.15); box-shadow: 0 2px 8px rgba(196,120,74,0.2); }
+.user-zahra .mood-emoji-btn.selected { border-color: var(--accent-zahra); background: #f5f2ff; box-shadow: 0 2px 8px rgba(123,110,160,0.2); }
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
 .gallery-item { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 1; cursor: pointer; }
 .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -278,14 +283,48 @@ label { font-size: 0.85rem; font-weight: 500; color: var(--text2); display: bloc
 
 /* DASHBOARD */
 .dash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 1.5rem; }
-.dash-widget { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; cursor: pointer; transition: all 0.15s; }
-.dash-widget:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-.dash-widget-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
-.dash-widget-title { font-size: 0.78rem; color: var(--text3); margin-bottom: 0.25rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
-.dash-widget-val { font-size: 1.2rem; font-weight: 600; }
-.dash-widget-sub { font-size: 0.78rem; color: var(--text3); margin-top: 2px; }
-.dash-greet { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-bottom: 0.25rem; }
-.dash-date { color: var(--text2); font-size: 0.9rem; margin-bottom: 1.5rem; }
+.dash-widget {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem;
+  cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+}
+.dash-widget::before {
+  content: ''; position: absolute; top: -20px; right: -20px;
+  width: 80px; height: 80px; border-radius: 50%;
+  background: currentColor; opacity: 0.05; transition: transform 0.3s;
+}
+.dash-widget:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.10); }
+.dash-widget:hover::before { transform: scale(1.4); }
+.dash-widget-icon { font-size: 2rem; margin-bottom: 0.6rem; display: block; }
+.dash-widget-title { font-size: 0.72rem; color: var(--text3); margin-bottom: 0.35rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
+.dash-widget-val { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; }
+.dash-widget-sub { font-size: 0.78rem; color: var(--text3); margin-top: 4px; }
+.dash-widget-bar { height: 4px; background: var(--bg2); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.dash-widget-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+
+.dash-hero {
+  background: linear-gradient(135deg, var(--accent-ami) 0%, #e8956a 100%);
+  border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem;
+  color: white; position: relative; overflow: hidden;
+}
+.user-zahra .dash-hero { background: linear-gradient(135deg, var(--accent-zahra) 0%, #9e8fc0 100%); }
+.dash-hero::after {
+  content: '✦'; position: absolute; right: 2rem; top: 50%; transform: translateY(-50%);
+  font-size: 5rem; opacity: 0.15; font-family: 'DM Serif Display', serif;
+}
+.dash-greet { font-family: 'DM Serif Display', serif; font-size: 2rem; margin-bottom: 0.3rem; color: white; }
+.dash-date { color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-bottom: 0; }
+.dash-hero-quote { font-size: 0.85rem; color: rgba(255,255,255,0.75); margin-top: 0.75rem; font-style: italic; }
+
+.dash-section-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--text2); }
+.dash-todo-card { background: var(--card); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
+.dash-todo-header { padding: 1rem 1.25rem 0.75rem; border-bottom: 1px solid var(--bg2); display: flex; justify-content: space-between; align-items: center; }
+.dash-todo-header .card-title { margin-bottom: 0; }
+.dash-quick-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
+.dash-stat-pill { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; display: flex; align-items: center; gap: 10px; }
+.dash-stat-pill-icon { font-size: 1.3rem; }
+.dash-stat-pill-info { }
+.dash-stat-pill-val { font-size: 1.1rem; font-weight: 700; }
+.dash-stat-pill-lbl { font-size: 0.72rem; color: var(--text3); }
 
 /* CUSTOM FEATURES */
 .custom-features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 12px; }
@@ -356,7 +395,26 @@ label { font-size: 0.85rem; font-weight: 500; color: var(--text2); display: bloc
 .user-zahra .progress-fill { background: var(--accent-zahra) !important; }
 .user-ami .progress-fill { background: var(--accent-ami) !important; }
 
-/* simple canvas chart */
+/* MOOD CALENDAR */
+.mood-cal-day {
+  aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; cursor: pointer; transition: all 0.15s; border: 2px solid transparent;
+  position: relative;
+}
+.mood-cal-day:hover { transform: scale(1.12); z-index: 1; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.mood-cal-day.empty { background: transparent; cursor: default; }
+.mood-cal-day.no-mood { background: var(--bg2); font-size: 0.72rem; color: var(--text3); }
+.mood-cal-day.today-box { border-color: var(--accent-ami) !important; }
+.user-zahra .mood-cal-day.today-box { border-color: var(--accent-zahra) !important; }
+.mood-cal-day-num { position: absolute; top: 2px; right: 4px; font-size: 0.6rem; color: rgba(0,0,0,0.35); line-height: 1; }
+.mood-day-header { text-align:center; font-size:0.72rem; color:var(--text3); font-weight:600; padding:4px 0; }
+
+/* WEIGHT PHOTO */
+.weight-entry-photo { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; cursor: pointer; flex-shrink:0; }
+
+/* GALLERY CATEGORY TAG */
+.gallery-cat-tag { display:inline-block; font-size:0.7rem; padding:2px 8px; border-radius:20px; background:var(--bg2); color:var(--text2); margin-top:3px; }
+
 canvas { max-width: 100%; }
 
 .empty-state { text-align: center; padding: 2rem; color: var(--text3); font-size: 0.9rem; }
@@ -457,10 +515,8 @@ canvas { max-width: 100%; }
       </div>
       <div class="nav-section">Lainnya</div>
       <div class="nav-item" data-page="wishlist" onclick="goPage('wishlist',this)">
+
         <span class="nav-icon">🛒</span> Keinginan & Kebutuhan
-      </div>
-      <div class="nav-item" data-page="custom" onclick="goPage('custom',this)">
-        <span class="nav-icon">⚙️</span> Fitur Lainnya
       </div>
     </nav>
     <button class="logout-btn" onclick="doLogout()">🚪 Keluar</button>
@@ -469,14 +525,18 @@ canvas { max-width: 100%; }
   <main class="main">
     <!-- DASHBOARD -->
     <div id="page-dashboard" class="page active">
-      <div class="page-header">
+      <div class="dash-hero">
         <div class="dash-greet" id="dash-greet"></div>
         <div class="dash-date" id="dash-date"></div>
+        <div class="dash-hero-quote" id="dash-quote"></div>
       </div>
       <div class="dash-grid" id="dash-grid"></div>
-      <div class="card">
-        <div class="card-title">📋 To Do Hari Ini</div>
-        <div id="dash-todos"></div>
+      <div class="dash-todo-card">
+        <div class="dash-todo-header">
+          <div class="card-title" style="margin-bottom:0">📋 To Do Hari Ini</div>
+          <button class="btn btn-secondary btn-sm" onclick="goPage('todo',document.querySelector('[data-page=todo]'))">Lihat semua →</button>
+        </div>
+        <div id="dash-todos" style="padding:0 0.25rem"></div>
       </div>
     </div>
 
@@ -573,11 +633,12 @@ canvas { max-width: 100%; }
         <div class="page-title">Gallery Foto</div>
         <div class="page-desc">Simpan momen-momen berhargamu di sini</div>
       </div>
-      <div class="gallery-upload" onclick="document.getElementById('gallery-upload-input').click()" style="margin-bottom:1.25rem">
-        <div style="font-size:2rem;margin-bottom:0.5rem">📷</div>
-        <div style="font-weight:500">Klik untuk upload foto</div>
-        <div style="font-size:0.8rem;color:var(--text3);margin-top:4px">JPG, PNG, GIF • Tersimpan di browser</div>
-        <input type="file" id="gallery-upload-input" accept="image/*" multiple style="display:none" onchange="handleGalleryUpload(this)">
+      <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-primary" onclick="openGalleryUploadModal()">📷 Upload Foto</button>
+        <select id="gallery-cat-filter" onchange="renderGallery()" style="width:160px">
+          <option value="all">Semua Kategori</option>
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="openManageGalleryCategories()" title="Kelola Kategori">⚙️ Kelola Kategori</button>
       </div>
       <div class="gallery-grid" id="gallery-grid"></div>
     </div>
@@ -589,6 +650,11 @@ canvas { max-width: 100%; }
         <div class="page-desc">Pantau perkembangan berat badanmu</div>
       </div>
       <div class="weight-stats" id="weight-stats"></div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">📉 Total Penurunan BB</div>
+        <div id="weight-loss-display" style="font-size:2rem;font-weight:700;color:var(--success);text-align:center;padding:0.5rem 0">—</div>
+        <div style="text-align:center;color:var(--text3);font-size:0.82rem" id="weight-loss-sub"></div>
+      </div>
       <div class="card">
         <div class="card-title">Grafik Berat Badan</div>
         <canvas id="weight-chart" height="180"></canvas>
@@ -599,6 +665,14 @@ canvas { max-width: 100%; }
           <div><label>Tanggal</label><input type="date" id="weight-date"></div>
           <div><label>Berat (kg)</label><input type="number" id="weight-val-input" placeholder="65.5" step="0.1"></div>
           <div><label>Catatan</label><input type="text" id="weight-note" placeholder="Opsional..."></div>
+        </div>
+        <div class="form-group" style="margin-top:0.75rem">
+          <label>📸 Foto Progress (opsional)</label>
+          <div class="gallery-upload" style="padding:1rem" onclick="document.getElementById('weight-photo-input').click()">
+            <span id="weight-photo-preview-label" style="font-size:0.88rem;color:var(--text2)">Klik untuk pilih foto...</span>
+            <input type="file" id="weight-photo-input" accept="image/*" style="display:none" onchange="previewWeightPhoto(this)">
+          </div>
+          <img id="weight-photo-preview" style="display:none;width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-top:6px" alt="preview">
         </div>
         <button class="btn btn-primary" style="margin-top:0.75rem" onclick="addWeight()">+ Tambah</button>
       </div>
@@ -618,6 +692,7 @@ canvas { max-width: 100%; }
       <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
         <select id="money-month-filter" onchange="renderMoney()" style="width:160px"></select>
         <button class="btn btn-primary" onclick="openMoneyModal()">+ Catat Transaksi</button>
+        <button class="btn btn-secondary btn-sm" onclick="openManageMoneyCategories()" title="Kelola Kategori">⚙️ Kategori</button>
       </div>
       <div class="card" style="margin-bottom:1rem">
         <div class="card-title">Grafik Bulanan</div>
@@ -637,27 +712,38 @@ canvas { max-width: 100%; }
       </div>
       <div class="card">
         <div class="card-title">Catat Mood Hari Ini</div>
-        <div class="mood-grid" id="mood-options">
-          <div class="mood-option mood-great" onclick="selectMood('😄 Senang banget')" data-mood="😄 Senang banget">😄 Senang banget</div>
-          <div class="mood-option mood-happy" onclick="selectMood('🙂 Oke')" data-mood="🙂 Oke">🙂 Oke</div>
-          <div class="mood-option mood-ok" onclick="selectMood('😐 Biasa aja')" data-mood="😐 Biasa aja">😐 Biasa aja</div>
-          <div class="mood-option mood-sad" onclick="selectMood('😔 Sedih')" data-mood="😔 Sedih">😔 Sedih</div>
-          <div class="mood-option mood-bad" onclick="selectMood('😤 Kesal')" data-mood="😤 Kesal">😤 Kesal</div>
-          <div class="mood-option" onclick="selectMood('😰 Cemas')" data-mood="😰 Cemas">😰 Cemas</div>
-          <div class="mood-option" onclick="selectMood('😴 Lelah')" data-mood="😴 Lelah">😴 Lelah</div>
-          <div class="mood-option" onclick="selectMood('🤩 Bersemangat')" data-mood="🤩 Bersemangat">🤩 Bersemangat</div>
+        <div class="mood-emoji-picker" id="mood-options-main">
+          <div class="mood-emoji-btn" onclick="selectMood('😄')" data-mood="😄" title="Senang banget">😄</div>
+          <div class="mood-emoji-btn" onclick="selectMood('🤩')" data-mood="🤩" title="Bersemangat">🤩</div>
+          <div class="mood-emoji-btn" onclick="selectMood('🙂')" data-mood="🙂" title="Oke">🙂</div>
+          <div class="mood-emoji-btn" onclick="selectMood('😐')" data-mood="😐" title="Biasa aja">😐</div>
+          <div class="mood-emoji-btn" onclick="selectMood('😔')" data-mood="😔" title="Sedih">😔</div>
+          <div class="mood-emoji-btn" onclick="selectMood('😤')" data-mood="😤" title="Kesal">😤</div>
+          <div class="mood-emoji-btn" onclick="selectMood('😰')" data-mood="😰" title="Cemas">😰</div>
+          <div class="mood-emoji-btn" onclick="selectMood('😴')" data-mood="😴" title="Lelah">😴</div>
+          <div class="mood-emoji-btn" onclick="selectMood('😢')" data-mood="😢" title="Menangis">😢</div>
+          <div class="mood-emoji-btn" onclick="selectMood('🥰')" data-mood="🥰" title="Penuh cinta">🥰</div>
+          <div class="mood-emoji-btn" onclick="selectMood('😎')" data-mood="😎" title="Percaya diri">😎</div>
+          <div class="mood-emoji-btn" onclick="selectMood('🤒')" data-mood="🤒" title="Sakit">🤒</div>
         </div>
-        <div style="margin-top:1rem;display:flex;gap:8px">
+        <div style="margin-top:1rem;display:flex;gap:8px;flex-wrap:wrap">
           <input type="date" id="mood-date" style="width:auto">
-          <input type="text" id="mood-note" placeholder="Cerita sedikit... (opsional)" style="flex:1">
+          <input type="text" id="mood-note" placeholder="Cerita sedikit... (opsional)" style="flex:1;min-width:180px">
           <button class="btn btn-primary" onclick="saveMood()">Simpan</button>
         </div>
       </div>
       <div class="card">
-        <div class="card-title">Grafik Mood</div>
-        <canvas id="mood-chart" height="120"></canvas>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <div class="card-title" style="margin-bottom:0">Kalender Mood</div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-secondary btn-sm" onclick="changeMoodMonth(-1)">‹</button>
+            <span id="mood-month-label" style="font-weight:600;font-size:0.9rem;min-width:120px;text-align:center;line-height:2"></span>
+            <button class="btn btn-secondary btn-sm" onclick="changeMoodMonth(1)">›</button>
+          </div>
+        </div>
+        <div id="mood-calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px"></div>
+        <div style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:8px;font-size:0.78rem;color:var(--text2)" id="mood-legend"></div>
       </div>
-      <div class="mood-log" id="mood-log"></div>
     </div>
 
     <!-- BOOKS -->
@@ -699,21 +785,7 @@ canvas { max-width: 100%; }
       </div>
     </div>
 
-    <!-- CUSTOM -->
-    <div id="page-custom" class="page">
-      <div class="page-header">
-        <div class="page-title">Fitur Lainnya</div>
-        <div class="page-desc">Tambahkan fitur khusus sesuai kebutuhanmu</div>
-      </div>
-      <button class="add-feature-btn" onclick="openCustomFeatureModal()" style="margin-bottom:1.25rem">
-        <span style="font-size:1.3rem">＋</span> Tambah Fitur Baru
-      </button>
-      <div class="custom-features-grid" id="custom-features-grid"></div>
-      <div class="card" id="custom-notes-card" style="margin-top:1.25rem">
-        <div class="card-title">📌 Catatan Bebas</div>
-        <textarea id="custom-notes" placeholder="Tulis apa saja di sini..." style="min-height:150px;width:100%" oninput="saveCustomNotes()"></textarea>
-      </div>
-    </div>
+
   </main>
 </div>
 
@@ -731,6 +803,34 @@ let currentHabitYear = new Date().getFullYear();
 let selectedMoodValue = null;
 let booksFilter = 'all';
 let wishFilter = 'all';
+const SESSION_KEY = 'planner_session';
+const IDLE_TIMEOUT = 30 * 60 * 1000; // 30 menit
+let idleTimer = null;
+
+function saveSession(user) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ user, timestamp: Date.now() }));
+}
+function clearSession() {
+  localStorage.removeItem(SESSION_KEY);
+}
+function loadSession() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SESSION_KEY));
+    if (s && s.user && (Date.now() - s.timestamp) < IDLE_TIMEOUT) return s.user;
+  } catch {}
+  return null;
+}
+function resetIdleTimer() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => {
+    doLogout();
+    alert('Sesi kamu sudah habis karena tidak aktif selama 30 menit.');
+  }, IDLE_TIMEOUT);
+  // update timestamp
+  const s = localStorage.getItem(SESSION_KEY);
+  if (s) try { const obj = JSON.parse(s); obj.timestamp = Date.now(); localStorage.setItem(SESSION_KEY, JSON.stringify(obj)); } catch {}
+}
+['click','keydown','mousemove','touchstart'].forEach(e => document.addEventListener(e, () => { if (currentUser) resetIdleTimer(); }, { passive: true }));
 
 function key(k) { return `planner_${currentUser}_${k}`; }
 function load(k, def=[]) { try { const v = localStorage.getItem(key(k)); return v ? JSON.parse(v) : def; } catch { return def; } }
@@ -750,7 +850,11 @@ function doLogin() {
   const err = document.getElementById('login-error');
   if (USERS[selectedUserLogin] !== pass) { err.textContent = 'Password salah. Coba lagi!'; return; }
   err.textContent = '';
-  currentUser = selectedUserLogin;
+  loginAs(selectedUserLogin);
+}
+function loginAs(user) {
+  currentUser = user;
+  saveSession(user);
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   const appEl = document.getElementById('app');
@@ -759,14 +863,25 @@ function doLogin() {
   document.getElementById('sidebar-avatar').style.cssText = `background:${currentUser==='ami'?'#fbe8d8':'#ede9ff'};color:${acc};width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700`;
   document.getElementById('sidebar-avatar').textContent = currentUser === 'ami' ? 'A' : 'Z';
   document.getElementById('sidebar-username').textContent = currentUser === 'ami' ? 'Ami' : 'Zahra';
+  resetIdleTimer();
   initAll();
 }
 function doLogout() {
+  clearTimeout(idleTimer);
+  clearSession();
   currentUser = null;
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-pass').value = '';
 }
+// Auto-restore session on page load
+window.addEventListener('DOMContentLoaded', () => {
+  const savedUser = loadSession();
+  if (savedUser) {
+    selectUser(savedUser);
+    loginAs(savedUser);
+  }
+});
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('mobile-overlay').classList.toggle('open');
@@ -781,7 +896,7 @@ const PAGE_TITLES = {
   dashboard: 'Dashboard', habit: 'Jadwal Harian', monthly: 'Rencana Bulanan',
   yearly: 'Rencana Tahunan', todo: 'To Do List', diary: 'Diary',
   gallery: 'Gallery Foto', weight: 'Berat Badan', money: 'Money Tracker',
-  mood: 'Mood Tracker', books: 'Tracker Buku', wishlist: 'Keinginan & Kebutuhan', custom: 'Fitur Lainnya'
+  mood: 'Mood Tracker', books: 'Tracker Buku', wishlist: 'Keinginan & Kebutuhan'
 };
 let pageHistory = ['dashboard'];
 function goPage(p, el) {
@@ -807,7 +922,6 @@ function goPage(p, el) {
   if (p === 'mood') renderMood();
   if (p === 'books') renderBooks();
   if (p === 'wishlist') renderWishlist();
-  if (p === 'custom') renderCustom();
   if (p === 'dashboard') renderDashboard();
 }
 function goBack() {
@@ -841,7 +955,8 @@ function initAll() {
   document.getElementById('mood-date').value = today;
   renderDashboard();
   renderHabit();
-  loadCustomNotes();
+  currentMoodMonth = new Date().getMonth();
+  currentMoodYear = new Date().getFullYear();
   // init mobile topbar
   const backBtn = document.getElementById('mobile-back-btn');
   if (backBtn) backBtn.style.visibility = 'hidden';
@@ -849,6 +964,28 @@ function initAll() {
 }
 
 // ====== DASHBOARD ======
+const MOOD_LABELS = {
+  '😄': 'Senang banget', '🤩': 'Bersemangat', '🙂': 'Oke', '😐': 'Biasa aja',
+  '😔': 'Sedih', '😤': 'Kesal', '😰': 'Cemas', '😴': 'Lelah',
+  '😢': 'Menangis', '🥰': 'Penuh cinta', '😎': 'Percaya diri', '🤒': 'Sakit'
+};
+function openPhotoViewer(src, caption, note) {
+  openModal(`<div style="text-align:center">
+    <img src="${src}" style="max-width:100%;max-height:60vh;border-radius:10px;margin-bottom:0.75rem" alt="${caption||''}">
+    ${caption ? `<div style="font-weight:600;font-size:1rem;margin-bottom:0.4rem">${caption}</div>` : ''}
+    ${note ? `<div style="color:var(--text2);font-size:0.88rem;line-height:1.6;white-space:pre-wrap">${note}</div>` : ''}
+    <div style="margin-top:1rem"><button class="btn btn-secondary" onclick="closeModal()">Tutup</button></div>
+  </div>`);
+}
+const MOTIVATIONAL_QUOTES = [
+  'Setiap hari adalah kesempatan baru untuk menjadi lebih baik. 🌸',
+  'Langkah kecil setiap hari membawa perubahan besar. ✨',
+  'Kamu lebih kuat dari yang kamu kira. 💪',
+  'Hari ini adalah hadiah terbaik yang kamu punya. 🎁',
+  'Fokus pada prosesnya, hasil pasti mengikuti. 🌟',
+  'Jangan bandingkan perjalananmu dengan orang lain. 🦋',
+  'Senyum kecilmu bisa mengubah harimu. 😊',
+];
 function renderDashboard() {
   const d = new Date();
   const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
@@ -858,14 +995,17 @@ function renderDashboard() {
   const greet = h < 12 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 18 ? 'Selamat sore' : 'Selamat malam';
   document.getElementById('dash-greet').textContent = `${greet}, ${name}! ✨`;
   document.getElementById('dash-date').textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  const qIdx = d.getDay();
+  document.getElementById('dash-quote').textContent = MOTIVATIONAL_QUOTES[qIdx];
   
   const todos = load('todos');
   const pending = todos.filter(t => !t.done).length;
   const habits = load('habits');
-  const todayKey = d.toISOString().split('T')[0];
   const mm = String(d.getMonth()+1).padStart(2,'0'); const yy = d.getFullYear(); const dd = String(d.getDate()).padStart(2,'0');
   const habitsDone = habits.filter(h => load(`habit_checks_${yy}_${d.getMonth()}`)?.[h.id]?.[dd]).length;
+  const habitPct = habits.length ? Math.round(habitsDone/habits.length*100) : 0;
   const moods = load('moods');
+  const todayKey = d.toISOString().split('T')[0];
   const todayMood = moods.find(m => m.date === todayKey);
   const weights = load('weights').sort((a,b) => new Date(b.date)-new Date(a.date));
   const latestW = weights[0];
@@ -875,43 +1015,46 @@ function renderDashboard() {
   const monMonthKey = `${yy}-${mm}`;
   const monthMoney = money.filter(m => m.date.startsWith(monMonthKey));
   const expense = monthMoney.filter(m => m.type === 'out').reduce((s,m) => s + m.amount, 0);
+  const income = monthMoney.filter(m => m.type === 'in').reduce((s,m) => s + m.amount, 0);
+  const accentColor = currentUser === 'ami' ? '#c4784a' : '#7b6ea0';
 
   document.getElementById('dash-grid').innerHTML = `
-    <div class="dash-widget" onclick="goPage('habit',document.querySelector('[data-page=habit]'))">
-      <div class="dash-widget-icon">✅</div>
+    <div class="dash-widget" onclick="goPage('habit',document.querySelector('[data-page=habit]'))" style="color:${accentColor}">
+      <span class="dash-widget-icon">✅</span>
       <div class="dash-widget-title">Habit Hari Ini</div>
-      <div class="dash-widget-val">${habitsDone}/${habits.length}</div>
+      <div class="dash-widget-val">${habitsDone}<span style="font-size:0.9rem;font-weight:400;color:var(--text3)">/${habits.length}</span></div>
       <div class="dash-widget-sub">kegiatan selesai</div>
+      <div class="dash-widget-bar"><div class="dash-widget-bar-fill" style="width:${habitPct}%;background:${accentColor}"></div></div>
     </div>
-    <div class="dash-widget" onclick="goPage('todo',document.querySelector('[data-page=todo]'))">
-      <div class="dash-widget-icon">📝</div>
-      <div class="dash-widget-title">To Do</div>
+    <div class="dash-widget" onclick="goPage('todo',document.querySelector('[data-page=todo]'))" style="color:#e05c5c">
+      <span class="dash-widget-icon">📝</span>
+      <div class="dash-widget-title">To Do Pending</div>
       <div class="dash-widget-val">${pending}</div>
       <div class="dash-widget-sub">tugas menunggu</div>
     </div>
-    <div class="dash-widget" onclick="goPage('mood',document.querySelector('[data-page=mood]'))">
-      <div class="dash-widget-icon">🌈</div>
+    <div class="dash-widget" onclick="goPage('mood',document.querySelector('[data-page=mood]'))" style="color:#7b6ea0">
+      <span class="dash-widget-icon">🌈</span>
       <div class="dash-widget-title">Mood Hari Ini</div>
-      <div class="dash-widget-val" style="font-size:1rem">${todayMood ? todayMood.mood : '—'}</div>
-      <div class="dash-widget-sub">${todayMood ? 'sudah dicatat' : 'belum dicatat'}</div>
+      <div class="dash-widget-val" style="font-size:1.8rem">${todayMood ? todayMood.mood : '—'}</div>
+      <div class="dash-widget-sub">${todayMood ? (MOOD_LABELS[todayMood.mood]||todayMood.mood) : 'belum dicatat'}</div>
     </div>
-    <div class="dash-widget" onclick="goPage('weight',document.querySelector('[data-page=weight]'))">
-      <div class="dash-widget-icon">⚖️</div>
+    <div class="dash-widget" onclick="goPage('weight',document.querySelector('[data-page=weight]'))" style="color:#5a8a5f">
+      <span class="dash-widget-icon">⚖️</span>
       <div class="dash-widget-title">Berat Badan</div>
-      <div class="dash-widget-val">${latestW ? latestW.weight + ' kg' : '—'}</div>
-      <div class="dash-widget-sub">${latestW ? 'terakhir dicatat' : 'belum ada data'}</div>
+      <div class="dash-widget-val">${latestW ? latestW.weight : '—'}<span style="font-size:0.85rem;font-weight:400"> kg</span></div>
+      <div class="dash-widget-sub">${latestW ? 'terakhir: ' + new Date(latestW.date).toLocaleDateString('id-ID',{day:'numeric',month:'short'}) : 'belum ada data'}</div>
     </div>
-    <div class="dash-widget" onclick="goPage('books',document.querySelector('[data-page=books]'))">
-      <div class="dash-widget-icon">📚</div>
+    <div class="dash-widget" onclick="goPage('books',document.querySelector('[data-page=books]'))" style="color:#b8860b">
+      <span class="dash-widget-icon">📚</span>
       <div class="dash-widget-title">Sedang Dibaca</div>
       <div class="dash-widget-val">${reading}</div>
-      <div class="dash-widget-sub">buku</div>
+      <div class="dash-widget-sub">buku aktif</div>
     </div>
-    <div class="dash-widget" onclick="goPage('money',document.querySelector('[data-page=money]'))">
-      <div class="dash-widget-icon">💰</div>
+    <div class="dash-widget" onclick="goPage('money',document.querySelector('[data-page=money]'))" style="color:#c44b4b">
+      <span class="dash-widget-icon">💸</span>
       <div class="dash-widget-title">Pengeluaran Bulan Ini</div>
-      <div class="dash-widget-val" style="font-size:0.95rem">Rp ${expense.toLocaleString('id')}</div>
-      <div class="dash-widget-sub">bulan ini</div>
+      <div class="dash-widget-val" style="font-size:0.9rem">Rp ${(expense/1000).toFixed(0)}K</div>
+      <div class="dash-widget-sub">pemasukan Rp ${(income/1000).toFixed(0)}K</div>
     </div>
   `;
   
@@ -919,7 +1062,7 @@ function renderDashboard() {
   const todayTodos = todos.filter(t => !t.done).slice(0,5);
   const dtEl = document.getElementById('dash-todos');
   if (!todayTodos.length) dtEl.innerHTML = '<div class="empty-state"><div>🎉</div>Semua tugas sudah selesai!</div>';
-  else dtEl.innerHTML = todayTodos.map(t => `<div class="todo-item"><input type="checkbox" onchange="toggleTodoDash('${t.id}')"><span class="todo-text">${t.text}</span><span class="todo-priority p-${t.priority}">${t.priority==='high'?'Tinggi':t.priority==='med'?'Sedang':'Rendah'}</span></div>`).join('');
+  else dtEl.innerHTML = todayTodos.map(t => `<div class="todo-item"><input type="checkbox" onchange="toggleTodoDash('${t.id}')"><span class="todo-text">${t.text}${t.recurring?'<span style="font-size:0.7rem;margin-left:6px;color:var(--text3)">🔁</span>':''}</span><span class="todo-priority p-${t.priority}">${t.priority==='high'?'Tinggi':t.priority==='med'?'Sedang':'Rendah'}</span></div>`).join('');
 }
 function toggleTodoDash(id) {
   let todos = load('todos');
@@ -939,16 +1082,29 @@ function renderHabit() {
   const checks = load(checksKey, {});
   const container = document.getElementById('habit-grid-container');
   if (!habits.length) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div>Belum ada kegiatan. Tambahkan dulu!</div>'; return; }
-  const cols = habits.length > 0 ? `80px repeat(${daysInMonth}, minmax(22px,1fr))` : '80px';
+  const cols = habits.length > 0 ? `160px repeat(${daysInMonth}, minmax(24px,1fr))` : '160px';
   let html = `<div class="habit-header-row" style="grid-template-columns:${cols}">`;
   html += `<div class="habit-name-cell" style="font-size:0.75rem;color:var(--text3)">Kegiatan</div>`;
-  for (let day = 1; day <= daysInMonth; day++) html += `<div class="day-num">${day}</div>`;
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dateObj = new Date(currentHabitYear, currentHabitMonth, day);
+    const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
+    html += `<div class="day-num" style="${isWeekend?'color:var(--accent-ami);font-weight:600':''}">${day}</div>`;
+  }
   html += '</div>';
-  habits.forEach(h => {
+  habits.forEach((h, hi) => {
     const doneCount = Object.values(checks[h.id]||{}).filter(Boolean).length;
     const pct = Math.round(doneCount/daysInMonth*100);
-    html += `<div class="habit-row" style="grid-template-columns:${cols}">`;
-    html += `<div class="habit-name-cell" title="${h.name}"><div>${h.emoji||'•'} ${h.name}</div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
+    html += `<div class="habit-row" style="grid-template-columns:${cols}" draggable="true" ondragstart="habitDragStart(event,${hi})" ondragover="habitDragOver(event,${hi})" ondrop="habitDrop(event,${hi})" ondragleave="habitDragLeave(event)" data-hi="${hi}">`;
+    html += `<div class="habit-name-cell" title="${h.name}">
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="cursor:grab;color:var(--text3);font-size:0.9rem" title="Drag untuk pindah urutan">⠿</span>
+        <span>${h.emoji||'•'}</span>
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.name}</span>
+        <button onclick="editHabit('${h.id}')" title="Edit nama" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.75rem;padding:2px 4px;border-radius:4px;flex-shrink:0" onmouseover="this.style.color='var(--accent-ami)'" onmouseout="this.style.color='var(--text3)'">✏️</button>
+        <button onclick="deleteHabit('${h.id}')" title="Hapus kegiatan" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.75rem;padding:2px 4px;border-radius:4px;flex-shrink:0" onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--text3)'">✕</button>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>`;
     for (let day = 1; day <= daysInMonth; day++) {
       const dd = String(day).padStart(2,'0');
       const done = checks[h.id]?.[dd];
@@ -983,6 +1139,56 @@ function changeMonth(dir) {
   if (currentHabitMonth > 11) { currentHabitMonth = 0; currentHabitYear++; }
   renderHabit();
 }
+function editHabit(id) {
+  const habits = load('habits');
+  const h = habits.find(x => x.id === id);
+  if (!h) return;
+  openModal(`<div class="modal-title">Edit Kegiatan</div>
+    <div class="form-row">
+      <div class="form-group" style="flex:3"><label>Nama Kegiatan</label><input type="text" id="edit-habit-name" value="${h.name}" placeholder="Nama kegiatan..."></div>
+      <div class="form-group" style="flex:1"><label>Emoji</label><input type="text" id="edit-habit-emoji" value="${h.emoji||'🔥'}" style="width:100%"></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveEditHabit('${id}')">Simpan</button></div>`);
+  setTimeout(() => document.getElementById('edit-habit-name').focus(), 100);
+}
+function saveEditHabit(id) {
+  const name = document.getElementById('edit-habit-name').value.trim();
+  if (!name) return;
+  const habits = load('habits');
+  const h = habits.find(x => x.id === id);
+  if (h) { h.name = name; h.emoji = document.getElementById('edit-habit-emoji').value.trim() || h.emoji; save('habits', habits); }
+  closeModal();
+  renderHabit();
+}
+function deleteHabit(id) {
+  if (!confirm('Hapus kegiatan ini?')) return;
+  save('habits', load('habits').filter(x => x.id !== id));
+  renderHabit();
+}
+let habitDragIdx = null;
+function habitDragStart(e, idx) {
+  habitDragIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+  e.currentTarget.style.opacity = '0.5';
+}
+function habitDragOver(e, idx) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.habit-row').forEach(r => r.style.borderTop = '');
+  if (idx !== habitDragIdx) e.currentTarget.style.borderTop = '2px solid var(--accent-ami)';
+}
+function habitDragLeave(e) { e.currentTarget.style.borderTop = ''; }
+function habitDrop(e, idx) {
+  e.preventDefault();
+  document.querySelectorAll('.habit-row').forEach(r => { r.style.borderTop = ''; r.style.opacity = ''; });
+  if (habitDragIdx === null || habitDragIdx === idx) return;
+  const habits = load('habits');
+  const moved = habits.splice(habitDragIdx, 1)[0];
+  habits.splice(idx, 0, moved);
+  save('habits', habits);
+  habitDragIdx = null;
+  renderHabit();
+}
 
 // ====== MONTHLY PLAN ======
 const MONTH_NAMES = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -991,12 +1197,17 @@ function renderMonthly() {
   const plans = load('monthly_plans');
   const grid = document.getElementById('monthly-grid');
   grid.innerHTML = MONTH_NAMES.map((m, mi) => {
-    const monthPlans = plans.filter(p => p.year === year && p.month === mi);
-    const items = monthPlans.map(p => `<div class="plan-item">
-      <input type="checkbox" ${p.done?'checked':''} onchange="togglePlan('${p.id}','monthly')" accent-color="red">
-      <span class="plan-item-text ${p.done?'done':''}">${p.text}</span>
-      <button onclick="deletePlan('${p.id}','monthly')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.8rem">✕</button>
-    </div>`).join('');
+    const monthPlans = plans.filter(p => p.year === year && p.month === mi)
+      .sort((a,b) => (a.date||'') > (b.date||'') ? 1 : -1);
+    const items = monthPlans.map(p => {
+      const dateLabel = p.date ? `<span style="font-size:0.72rem;color:var(--text3);white-space:nowrap">📅 ${new Date(p.date+'T00:00').getDate()} ${MONTH_NAMES[mi].slice(0,3)}</span>` : '';
+      return `<div class="plan-item" style="flex-wrap:wrap;gap:4px">
+        <input type="checkbox" ${p.done?'checked':''} onchange="togglePlan('${p.id}','monthly')" accent-color="red">
+        <span class="plan-item-text ${p.done?'done':''}" style="flex:1">${p.text}</span>
+        ${dateLabel}
+        <button onclick="deletePlan('${p.id}','monthly')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.8rem">✕</button>
+      </div>`;
+    }).join('');
     return `<div class="plan-card">
       <h3>${m} <button onclick="openAddPlan(${year},${mi})" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:1.1rem">+</button></h3>
       ${items || '<div style="color:var(--text3);font-size:0.82rem">Belum ada rencana</div>'}
@@ -1006,18 +1217,27 @@ function renderMonthly() {
 function openAddPlan(yr, mo) {
   const year = yr !== undefined ? yr : parseInt(document.getElementById('monthly-year-sel').value);
   const month = mo !== undefined ? mo : new Date().getMonth();
+  const defaultDay = new Date().getDate();
+  const defaultDate = `${year}-${String(month+1).padStart(2,'0')}-${String(defaultDay).padStart(2,'0')}`;
   openModal(`<div class="modal-title">Tambah Rencana</div>
-    <div class="form-group"><label>Bulan</label><select id="m-mo" style="width:100%">${MONTH_NAMES.map((m,i)=>`<option value="${i}" ${i===month?'selected':''}>${m}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Bulan</label><select id="m-mo" style="width:100%" onchange="updatePlanDateMin(${year})">${MONTH_NAMES.map((m,i)=>`<option value="${i}" ${i===month?'selected':''}>${m}</option>`).join('')}</select></div>
+    <div class="form-group"><label>📅 Tanggal Rencana</label><input type="date" id="m-date" value="${defaultDate}"></div>
     <div class="form-group"><label>Rencana</label><input type="text" id="m-text" placeholder="Contoh: Liburan ke Bali..."></div>
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="savePlan(${year})">Simpan</button></div>`);
   setTimeout(()=>document.getElementById('m-text').focus(),100);
+}
+function updatePlanDateMin(year) {
+  const mo = parseInt(document.getElementById('m-mo').value);
+  const first = `${year}-${String(mo+1).padStart(2,'0')}-01`;
+  document.getElementById('m-date').value = first;
 }
 function savePlan(year) {
   const mo = parseInt(document.getElementById('m-mo').value);
   const text = document.getElementById('m-text').value.trim();
   if (!text) return;
+  const dateVal = document.getElementById('m-date').value;
   const plans = load('monthly_plans');
-  plans.push({ id: Date.now().toString(), year, month: mo, text, done: false });
+  plans.push({ id: Date.now().toString(), year, month: mo, text, date: dateVal, done: false });
   save('monthly_plans', plans);
   closeModal();
   renderMonthly();
@@ -1035,19 +1255,29 @@ function deletePlan(id, type) {
 }
 
 // ====== YEARLY PLAN ======
-const CATEGORIES = ['Karir & Pendidikan','Kesehatan & Kebugaran','Keuangan','Hubungan & Keluarga','Hobi & Hiburan','Perjalanan','Spiritual','Lainnya'];
+const DEFAULT_CATEGORIES = ['Karir & Pendidikan','Kesehatan & Kebugaran','Keuangan','Hubungan & Keluarga','Hobi & Hiburan','Perjalanan','Spiritual','Lainnya'];
+function getCategories() {
+  const custom = load('yearly_custom_categories', []);
+  return [...DEFAULT_CATEGORIES, ...custom];
+}
 function renderYearly() {
   const year = parseInt(document.getElementById('yearly-year-sel').value);
   const goals = load('yearly_plans').filter(g => g.year === year);
   const grid = document.getElementById('yearly-grid');
+  const allCats = getCategories();
   const byCat = {};
-  CATEGORIES.forEach(c => { byCat[c] = goals.filter(g => g.category === c); });
-  grid.innerHTML = CATEGORIES.map(cat => {
+  allCats.forEach(c => { byCat[c] = goals.filter(g => g.category === c); });
+  grid.innerHTML = allCats.map(cat => {
     const items = byCat[cat];
-    if (!items.length && goals.length > 0) return '';
+    const isCustom = !DEFAULT_CATEGORIES.includes(cat);
+    if (!items.length && goals.length > 0 && !isCustom) return '';
     return `<div class="card" style="margin-bottom:0.75rem">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
-        ${cat} <button onclick="openAddYearlyGoal(${year},'${cat}')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:1.1rem">+</button>
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <span>${cat}</span>
+        <div style="display:flex;gap:6px">
+          <button onclick="openAddYearlyGoal(${year},'${cat.replace(/'/g,"\\'")}' )" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:1.1rem">+</button>
+          ${isCustom ? `<button onclick="deleteYearlyCategory('${cat.replace(/'/g,"\\'")}',${year})" title="Hapus kategori" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.8rem">✕</button>` : ''}
+        </div>
       </div>
       ${items.length ? items.map(g => `<div class="plan-item">
         <input type="checkbox" ${g.done?'checked':''} onchange="togglePlan('${g.id}','yearly')">
@@ -1055,12 +1285,35 @@ function renderYearly() {
         <button onclick="deletePlan('${g.id}','yearly')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.8rem">✕</button>
       </div>`).join('') : '<div style="color:var(--text3);font-size:0.82rem">Belum ada target</div>'}
     </div>`;
-  }).join('');
+  }).join('') + `<button class="add-feature-btn" onclick="openAddYearlyCategory()" style="margin-top:0.5rem"><span style="font-size:1.2rem">＋</span> Tambah Kategori Baru</button>`;
+}
+function openAddYearlyCategory() {
+  openModal(`<div class="modal-title">Tambah Kategori Baru</div>
+    <div class="form-group"><label>Nama Kategori</label><input type="text" id="ycat-name" placeholder="Contoh: Kreativitas, Sosial..."></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveYearlyCategory()">Tambah</button></div>`);
+  setTimeout(() => document.getElementById('ycat-name').focus(), 100);
+}
+function saveYearlyCategory() {
+  const name = document.getElementById('ycat-name').value.trim();
+  if (!name) return;
+  const cats = load('yearly_custom_categories', []);
+  if (!cats.includes(name) && !DEFAULT_CATEGORIES.includes(name)) { cats.push(name); save('yearly_custom_categories', cats); }
+  closeModal();
+  renderYearly();
+}
+function deleteYearlyCategory(cat, year) {
+  if (!confirm(`Hapus kategori "${cat}"? Semua target di kategori ini juga akan terhapus.`)) return;
+  const cats = load('yearly_custom_categories', []).filter(c => c !== cat);
+  save('yearly_custom_categories', cats);
+  const goals = load('yearly_plans').filter(g => !(g.category === cat && g.year === year));
+  save('yearly_plans', goals);
+  renderYearly();
 }
 function openAddYearlyGoal(yr, cat) {
   const year = yr || parseInt(document.getElementById('yearly-year-sel').value);
+  const allCats = getCategories();
   openModal(`<div class="modal-title">Tambah Target Tahunan</div>
-    <div class="form-group"><label>Kategori</label><select id="y-cat" style="width:100%">${CATEGORIES.map(c=>`<option value="${c}" ${c===cat?'selected':''}>${c}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Kategori</label><select id="y-cat" style="width:100%">${allCats.map(c=>`<option value="${c}" ${c===cat?'selected':''}>${c}</option>`).join('')}</select></div>
     <div class="form-group"><label>Target</label><input type="text" id="y-text" placeholder="Contoh: Naik jabatan, Beli motor..."></div>
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveYearly(${year})">Simpan</button></div>`);
   setTimeout(()=>document.getElementById('y-text').focus(),100);
@@ -1077,23 +1330,6 @@ function saveYearly(year) {
 }
 
 // ====== TODO ======
-function renderTodo() {
-  let todos = load('todos');
-  const filt = document.getElementById('todo-filter').value;
-  const catF = document.getElementById('todo-cat-filter').value;
-  if (filt === 'active') todos = todos.filter(t => !t.done);
-  if (filt === 'done') todos = todos.filter(t => t.done);
-  if (catF !== 'all') todos = todos.filter(t => t.category === catF);
-  const list = document.getElementById('todo-list');
-  if (!todos.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div>Tidak ada tugas ditemukan</div>'; return; }
-  list.innerHTML = todos.map(t => `<div class="todo-item">
-    <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo('${t.id}')">
-    <span class="todo-text ${t.done?'done':''}">${t.text}</span>
-    <span class="todo-cat badge-${t.category}">${t.category==='personal'?'Personal':t.category==='work'?'Kerja':'Kesehatan'}</span>
-    <span class="todo-priority p-${t.priority}">${t.priority==='high'?'Tinggi':t.priority==='med'?'Sedang':'Rendah'}</span>
-    <button onclick="deleteTodo('${t.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.9rem">✕</button>
-  </div>`).join('');
-}
 function openTodoModal() {
   openModal(`<div class="modal-title">Tambah Tugas</div>
     <div class="form-group"><label>Tugas</label><input type="text" id="td-text" placeholder="Apa yang perlu dilakukan?"></div>
@@ -1101,17 +1337,56 @@ function openTodoModal() {
       <div class="form-group"><label>Kategori</label><select id="td-cat"><option value="personal">Personal</option><option value="work">Pekerjaan</option><option value="health">Kesehatan</option></select></div>
       <div class="form-group"><label>Prioritas</label><select id="td-pri"><option value="high">Tinggi</option><option value="med">Sedang</option><option value="low">Rendah</option></select></div>
     </div>
+    <div class="form-group" style="display:flex;align-items:center;gap:10px;background:var(--bg2);border-radius:10px;padding:0.75rem 1rem">
+      <input type="checkbox" id="td-recurring" style="width:18px;height:18px;flex-shrink:0">
+      <div>
+        <label for="td-recurring" style="cursor:pointer;font-size:0.9rem;color:var(--text);display:block;margin-bottom:0">🔁 Kegiatan Berulang Setiap Hari</label>
+        <div style="font-size:0.78rem;color:var(--text3)">Tugas ini akan otomatis aktif kembali setiap hari</div>
+      </div>
+    </div>
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveTodo()">Tambah</button></div>`);
   setTimeout(()=>document.getElementById('td-text').focus(),100);
 }
 function saveTodo() {
   const text = document.getElementById('td-text').value.trim();
   if (!text) return;
+  const recurring = document.getElementById('td-recurring').checked;
   const todos = load('todos');
-  todos.unshift({ id: Date.now().toString(), text, category: document.getElementById('td-cat').value, priority: document.getElementById('td-pri').value, done: false, created: new Date().toISOString() });
+  todos.unshift({ id: Date.now().toString(), text, category: document.getElementById('td-cat').value, priority: document.getElementById('td-pri').value, done: false, recurring, created: new Date().toISOString() });
   save('todos', todos);
   closeModal();
   renderTodo();
+}
+function resetRecurringTodos() {
+  const today = new Date().toISOString().split('T')[0];
+  const lastReset = localStorage.getItem(key('recurring_reset_date'));
+  if (lastReset === today) return;
+  localStorage.setItem(key('recurring_reset_date'), today);
+  const todos = load('todos');
+  let changed = false;
+  todos.forEach(t => { if (t.recurring && t.done) { t.done = false; changed = true; } });
+  if (changed) save('todos', todos);
+}
+function renderTodo() {
+  resetRecurringTodos();
+  let todos = load('todos');
+  const filt = document.getElementById('todo-filter').value;
+  const catF = document.getElementById('todo-cat-filter').value;
+  if (filt === 'active') todos = todos.filter(t => !t.done);
+  if (filt === 'done') todos = todos.filter(t => t.done);
+  if (catF !== 'all') todos = todos.filter(t => t.category === catF);
+  // Sort: recurring first, then by priority
+  todos.sort((a,b) => { if (a.recurring && !b.recurring) return -1; if (!a.recurring && b.recurring) return 1; return 0; });
+  const list = document.getElementById('todo-list');
+  if (!todos.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div>Tidak ada tugas ditemukan</div>'; return; }
+  list.innerHTML = todos.map(t => `<div class="todo-item" style="${t.recurring?'background:linear-gradient(90deg,#fff8f5 0%,var(--card) 80%)':''}">
+    <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo('${t.id}')">
+    <span class="todo-text ${t.done?'done':''}">${t.text}</span>
+    ${t.recurring ? '<span title="Berulang setiap hari" style="font-size:0.75rem;color:var(--accent-ami);background:#fff0e8;padding:2px 6px;border-radius:10px;flex-shrink:0">🔁 Harian</span>' : ''}
+    <span class="todo-cat badge-${t.category}">${t.category==='personal'?'Personal':t.category==='work'?'Kerja':'Kesehatan'}</span>
+    <span class="todo-priority p-${t.priority}">${t.priority==='high'?'Tinggi':t.priority==='med'?'Sedang':'Rendah'}</span>
+    <button onclick="deleteTodo('${t.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.9rem">✕</button>
+  </div>`).join('');
 }
 function toggleTodo(id) {
   let todos = load('todos');
@@ -1129,11 +1404,12 @@ function renderDiary() {
   const list = document.getElementById('diary-list');
   if (!diaries.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📖</div>Belum ada diary. Tulis sekarang!</div>'; return; }
   list.innerHTML = diaries.map(d => `<div class="diary-card">
+    ${d.photo ? `<img src="${d.photo}" class="diary-photo" alt="foto diary" onclick="openPhotoViewer('${d.photo.replace(/'/g,"&#39;")}')">` : ''}
     <div class="diary-date">${new Date(d.date).toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
     <div class="diary-title-text">${d.title}</div>
     <div class="diary-body">${d.body}</div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem">
-      <span class="diary-mood-badge">${d.mood || ''}</span>
+      <span class="diary-mood-badge" style="font-size:1.2rem">${d.mood || ''}</span>
       <div class="diary-actions">
         <button onclick="editDiary('${d.id}')" class="btn btn-secondary btn-sm">Edit</button>
         <button onclick="deleteDiary('${d.id}')" class="btn btn-secondary btn-sm">Hapus</button>
@@ -1141,16 +1417,51 @@ function renderDiary() {
     </div>
   </div>`).join('');
 }
+const DIARY_MOODS = ['😄','🤩','🙂','😐','😔','😤','😰','😴','😢','🥰','😎','🤒'];
+let selectedDiaryMood = '';
+function selectDiaryMood(em) {
+  selectedDiaryMood = em;
+  document.querySelectorAll('.diary-mood-pick').forEach(b => b.classList.remove('selected'));
+  const el = document.querySelector(`.diary-mood-pick[data-em="${em}"]`);
+  if (el) el.classList.add('selected');
+  document.getElementById('dy-mood-val').value = em;
+}
 function openDiaryModal(id) {
   const diaries = load('diaries');
   const ex = id ? diaries.find(d => d.id === id) : null;
+  selectedDiaryMood = ex?.mood || '';
   openModal(`<div class="modal-title">${ex ? 'Edit' : 'Tulis'} Diary</div>
     <div class="form-group"><label>Tanggal</label><input type="date" id="dy-date" value="${ex?.date||new Date().toISOString().split('T')[0]}"></div>
     <div class="form-group"><label>Judul</label><input type="text" id="dy-title" placeholder="Judul hari ini..." value="${ex?.title||''}"></div>
     <div class="form-group"><label>Cerita</label><textarea id="dy-body" style="min-height:140px" placeholder="Tulis perasaan dan ceritamu...">${ex?.body||''}</textarea></div>
-    <div class="form-group"><label>Mood</label><input type="text" id="dy-mood" placeholder="😊 Senang, 😢 Sedih..." value="${ex?.mood||''}"></div>
+    <div class="form-group">
+      <label>Mood Hari Ini</label>
+      <div class="mood-emoji-picker" style="margin-bottom:0.5rem">${DIARY_MOODS.map(em=>`<div class="mood-emoji-btn diary-mood-pick${ex?.mood===em?' selected':''}" data-em="${em}" onclick="selectDiaryMood('${em}')" title="${em}">${em}</div>`).join('')}</div>
+      <input type="hidden" id="dy-mood-val" value="${ex?.mood||''}">
+    </div>
+    <div class="form-group">
+      <label>📸 Tambah Foto (opsional)</label>
+      ${ex?.photo ? `<img src="${ex.photo}" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:6px" id="dy-photo-preview" alt="foto">` : `<img id="dy-photo-preview" style="display:none;width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:6px">`}
+      <div class="gallery-upload" style="padding:0.75rem" onclick="document.getElementById('dy-photo-input').click()">
+        <span style="font-size:0.85rem;color:var(--text2)">📷 Klik untuk pilih foto...</span>
+        <input type="file" id="dy-photo-input" accept="image/*" style="display:none" onchange="previewDiaryPhoto(this)">
+      </div>
+      <input type="hidden" id="dy-photo-data" value="${ex?.photo||''}">
+    </div>
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveDiary('${id||''}')">Simpan</button></div>`);
   setTimeout(()=>document.getElementById('dy-title').focus(),100);
+}
+function previewDiaryPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const preview = document.getElementById('dy-photo-preview');
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+    document.getElementById('dy-photo-data').value = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 function editDiary(id) { openDiaryModal(id); }
 function saveDiary(id) {
@@ -1158,12 +1469,14 @@ function saveDiary(id) {
   const title = document.getElementById('dy-title').value.trim() || 'Tanpa judul';
   const body = document.getElementById('dy-body').value.trim();
   if (!body) return;
+  const mood = document.getElementById('dy-mood-val').value;
+  const photo = document.getElementById('dy-photo-data').value;
   let diaries = load('diaries');
   if (id) {
     const d = diaries.find(x => x.id === id);
-    if (d) Object.assign(d, { date, title, body, mood: document.getElementById('dy-mood').value });
+    if (d) Object.assign(d, { date, title, body, mood, photo: photo || d.photo || '' });
   } else {
-    diaries.unshift({ id: Date.now().toString(), date, title, body, mood: document.getElementById('dy-mood').value });
+    diaries.unshift({ id: Date.now().toString(), date, title, body, mood, photo });
   }
   save('diaries', diaries);
   closeModal();
@@ -1176,30 +1489,80 @@ function deleteDiary(id) {
 }
 
 // ====== GALLERY ======
-function handleGalleryUpload(input) {
-  const files = Array.from(input.files);
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const gallery = load('gallery');
-      gallery.push({ id: Date.now().toString() + Math.random(), src: e.target.result, caption: file.name.replace(/\.[^.]+$/,''), date: new Date().toISOString().split('T')[0] });
-      save('gallery', gallery);
-      renderGallery();
-    };
-    reader.readAsDataURL(file);
+const DEFAULT_GALLERY_CATS = ['Semua','Liburan','Keluarga','Makanan','Momen Spesial','Lainnya'];
+function getGalleryCats() {
+  const custom = load('gallery_custom_cats', []);
+  return [...DEFAULT_GALLERY_CATS.slice(1), ...custom];
+}
+function refreshGalleryCatFilter() {
+  const sel = document.getElementById('gallery-cat-filter');
+  if (!sel) return;
+  const cats = getGalleryCats();
+  sel.innerHTML = `<option value="all">Semua Kategori</option>` + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+}
+function openGalleryUploadModal() {
+  const cats = getGalleryCats();
+  openModal(`<div class="modal-title">Upload Foto</div>
+    <div class="form-group">
+      <label>Pilih Foto</label>
+      <div class="gallery-upload" style="padding:1rem" onclick="document.getElementById('gal-file-input').click()">
+        <span id="gal-file-label" style="font-size:0.88rem;color:var(--text2)">📷 Klik untuk pilih foto...</span>
+        <input type="file" id="gal-file-input" accept="image/*" style="display:none" onchange="previewGalPhoto(this)">
+      </div>
+      <img id="gal-preview" style="display:none;width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-top:6px" alt="preview">
+    </div>
+    <div class="form-group"><label>Kategori</label><select id="gal-cat">${cats.map(c=>`<option value="${c}">${c}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Judul Foto</label><input type="text" id="gal-caption" placeholder="Nama atau judul foto..."></div>
+    <div class="form-group"><label>Cerita / Catatan</label><textarea id="gal-note" placeholder="Ceritakan momen ini..." style="min-height:80px"></textarea></div>
+    <input type="hidden" id="gal-photo-data" value="">
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveGalleryPhoto()">Simpan</button></div>`);
+}
+function previewGalPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('gal-file-label').textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const p = document.getElementById('gal-preview');
+    p.src = e.target.result; p.style.display='block';
+    document.getElementById('gal-photo-data').value = e.target.result;
+    if (!document.getElementById('gal-caption').value) {
+      document.getElementById('gal-caption').value = file.name.replace(/\.[^.]+$/,'');
+    }
+  };
+  reader.readAsDataURL(file);
+}
+function saveGalleryPhoto() {
+  const src = document.getElementById('gal-photo-data').value;
+  if (!src) { alert('Pilih foto dulu!'); return; }
+  const gallery = load('gallery');
+  gallery.push({
+    id: Date.now().toString() + Math.random(),
+    src,
+    caption: document.getElementById('gal-caption').value || 'Foto',
+    note: document.getElementById('gal-note').value,
+    category: document.getElementById('gal-cat').value,
+    date: new Date().toISOString().split('T')[0]
   });
-  input.value = '';
+  save('gallery', gallery);
+  closeModal();
+  refreshGalleryCatFilter();
+  renderGallery();
 }
 function renderGallery() {
-  const gallery = load('gallery');
+  refreshGalleryCatFilter();
+  let gallery = load('gallery');
+  const catF = document.getElementById('gallery-cat-filter')?.value || 'all';
+  if (catF !== 'all') gallery = gallery.filter(g => g.category === catF);
   const grid = document.getElementById('gallery-grid');
   if (!gallery.length) { grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🖼️</div>Belum ada foto. Upload sekarang!</div>'; return; }
   grid.innerHTML = gallery.map(g => `<div>
-    <div class="gallery-item" style="background:#f0e8dc">
+    <div class="gallery-item" style="background:#f0e8dc" onclick="openPhotoViewer('${g.src.replace(/'/g,"&#39;")}','${(g.caption||'').replace(/'/g,"&#39;")}','${(g.note||'').replace(/'/g,"&#39;")}')">
       <img src="${g.src}" alt="${g.caption}" loading="lazy">
-      <div class="gallery-item-overlay"><button onclick="deletePhoto('${g.id}')">🗑 Hapus</button></div>
+      <div class="gallery-item-overlay"><button onclick="event.stopPropagation();deletePhoto('${g.id}')">🗑 Hapus</button></div>
     </div>
-    <div class="gallery-caption">${g.caption}</div>
+    <div class="gallery-caption" title="${g.caption}">${g.caption}</div>
+    ${g.category ? `<div style="text-align:center"><span class="gallery-cat-tag">${g.category}</span></div>` : ''}
   </div>`).join('');
 }
 function deletePhoto(id) {
@@ -1207,8 +1570,48 @@ function deletePhoto(id) {
   save('gallery', load('gallery').filter(x => x.id !== id));
   renderGallery();
 }
+function openManageGalleryCategories() {
+  const cats = load('gallery_custom_cats', []);
+  openModal(`<div class="modal-title">Kelola Kategori Gallery</div>
+    <div style="margin-bottom:1rem">
+      <div style="font-size:0.82rem;color:var(--text2);margin-bottom:0.5rem">Kategori default: Liburan, Keluarga, Makanan, Momen Spesial, Lainnya</div>
+      <div id="gal-cats-list">${cats.map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bg2)"><span style="flex:1">${c}</span><button onclick="deleteGalleryCategory('${c.replace(/'/g,"\\'")}'); renderManageGalleryCats()" style="background:none;border:none;cursor:pointer;color:var(--danger)">✕</button></div>`).join('')||'<div style="color:var(--text3);font-size:0.82rem">Belum ada kategori custom</div>'}</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <input type="text" id="gal-newcat" placeholder="Nama kategori baru..." style="flex:1">
+      <button class="btn btn-primary" onclick="addGalleryCategory()">+ Tambah</button>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal();renderGallery()">Selesai</button></div>`);
+}
+function addGalleryCategory() {
+  const name = document.getElementById('gal-newcat').value.trim();
+  if (!name) return;
+  const cats = load('gallery_custom_cats', []);
+  if (!cats.includes(name)) { cats.push(name); save('gallery_custom_cats', cats); }
+  document.getElementById('gal-newcat').value = '';
+  const el = document.getElementById('gal-cats-list');
+  const all = load('gallery_custom_cats', []);
+  el.innerHTML = all.map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bg2)"><span style="flex:1">${c}</span><button onclick="deleteGalleryCategory('${c.replace(/'/g,"\\'")}');this.closest('div').remove()" style="background:none;border:none;cursor:pointer;color:var(--danger)">✕</button></div>`).join('');
+}
+function deleteGalleryCategory(name) {
+  const cats = load('gallery_custom_cats', []).filter(c => c !== name);
+  save('gallery_custom_cats', cats);
+}
 
 // ====== WEIGHT ======
+let pendingWeightPhoto = '';
+function previewWeightPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    pendingWeightPhoto = e.target.result;
+    document.getElementById('weight-photo-preview-label').textContent = '✅ ' + file.name;
+    const p = document.getElementById('weight-photo-preview');
+    p.src = e.target.result; p.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
 function renderWeight() {
   const weights = load('weights').sort((a,b) => new Date(a.date)-new Date(b.date));
   const stats = document.getElementById('weight-stats');
@@ -1220,6 +1623,19 @@ function renderWeight() {
     <div class="stat-box"><div class="stat-val">${current?current.weight+' kg':'—'}</div><div class="stat-lbl">Terkini</div></div>
     <div class="stat-box"><div class="stat-val">${min?min+' kg':'—'}</div><div class="stat-lbl">Terendah</div></div>
     <div class="stat-box"><div class="stat-val">${max?max+' kg':'—'}</div><div class="stat-lbl">Tertinggi</div></div>`;
+  // Weight loss display
+  const lossEl = document.getElementById('weight-loss-display');
+  const subEl = document.getElementById('weight-loss-sub');
+  if (weights.length >= 2) {
+    const loss = (first.weight - current.weight);
+    const sign = loss > 0 ? '-' : (loss < 0 ? '+' : '');
+    lossEl.style.color = loss > 0 ? 'var(--success)' : (loss < 0 ? 'var(--danger)' : 'var(--text2)');
+    lossEl.textContent = `${sign}${Math.abs(loss).toFixed(1)} kg`;
+    subEl.textContent = `Dari ${first.weight} kg → ${current.weight} kg`;
+  } else {
+    lossEl.textContent = '—';
+    subEl.textContent = 'Tambahkan minimal 2 data untuk melihat progress';
+  }
   const ctx = document.getElementById('weight-chart').getContext('2d');
   drawLineChart(ctx, weights.map(w=>w.date.slice(5)), weights.map(w=>w.weight), '#c4784a');
   const log = document.getElementById('weight-log');
@@ -1229,10 +1645,13 @@ function renderWeight() {
     const prev = rev[i+1];
     const diff = prev ? (w.weight - prev.weight).toFixed(1) : null;
     return `<div class="weight-entry">
-      <span>${new Date(w.date).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})}</span>
-      <span style="color:var(--text3);font-size:0.8rem">${w.note||''}</span>
+      ${w.photo ? `<img src="${w.photo}" class="weight-entry-photo" onclick="openPhotoViewer('${w.photo.replace(/'/g,"&#39;")}','${new Date(w.date).toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})} - ${w.weight}kg')" alt="foto">` : ''}
+      <div style="flex:1">
+        <div style="font-weight:500;font-size:0.88rem">${new Date(w.date).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})}</div>
+        ${w.note ? `<div style="color:var(--text3);font-size:0.78rem">${w.note}</div>` : ''}
+      </div>
       <span class="weight-val">${w.weight} kg</span>
-      ${diff!==null ? `<span class="weight-diff ${diff>0?'up':'down'}">${diff>0?'+':''}${diff} kg</span>` : ''}
+      ${diff!==null ? `<span class="weight-diff ${parseFloat(diff)>0?'up':'down'}">${parseFloat(diff)>0?'+':''}${diff} kg</span>` : ''}
       <button onclick="deleteWeight('${w.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3)">✕</button>
     </div>`;
   }).join('');
@@ -1242,10 +1661,14 @@ function addWeight() {
   const v = parseFloat(document.getElementById('weight-val-input').value);
   if (!d || isNaN(v)) return;
   const weights = load('weights');
-  weights.push({ id: Date.now().toString(), date: d, weight: v, note: document.getElementById('weight-note').value });
+  weights.push({ id: Date.now().toString(), date: d, weight: v, note: document.getElementById('weight-note').value, photo: pendingWeightPhoto });
   save('weights', weights);
   document.getElementById('weight-val-input').value = '';
   document.getElementById('weight-note').value = '';
+  pendingWeightPhoto = '';
+  document.getElementById('weight-photo-preview-label').textContent = 'Klik untuk pilih foto...';
+  document.getElementById('weight-photo-preview').style.display = 'none';
+  document.getElementById('weight-photo-input').value = '';
   renderWeight();
 }
 function deleteWeight(id) {
@@ -1254,6 +1677,11 @@ function deleteWeight(id) {
 }
 
 // ====== MONEY ======
+const DEFAULT_MONEY_CATS = ['Makan & Minum','Transport','Belanja','Hiburan','Kesehatan','Tagihan','Gaji','Lainnya'];
+function getMoneyCats() {
+  const custom = load('money_custom_cats', []);
+  return [...DEFAULT_MONEY_CATS, ...custom];
+}
 function renderMoney() {
   const monthKey = document.getElementById('money-month-filter').value;
   const money = load('money').filter(m => m.date.startsWith(monthKey)).sort((a,b) => new Date(b.date)-new Date(a.date));
@@ -1264,7 +1692,6 @@ function renderMoney() {
     <div class="stat-box money-in"><div class="stat-val" style="color:var(--success);font-size:0.95rem">Rp ${income.toLocaleString('id')}</div><div class="stat-lbl">Pemasukan</div></div>
     <div class="stat-box money-out"><div class="stat-val" style="color:var(--danger);font-size:0.95rem">Rp ${expense.toLocaleString('id')}</div><div class="stat-lbl">Pengeluaran</div></div>
     <div class="stat-box money-bal"><div class="stat-val" style="font-size:0.95rem;color:${balance>=0?'var(--success)':'var(--danger)'}">Rp ${balance.toLocaleString('id')}</div><div class="stat-lbl">Saldo</div></div>`;
-  // simple bar chart
   const ctx = document.getElementById('money-chart').getContext('2d');
   const catTotals = {};
   money.filter(m=>m.type==='out').forEach(m => { catTotals[m.category] = (catTotals[m.category]||0) + m.amount; });
@@ -1275,37 +1702,47 @@ function renderMoney() {
   if (!money.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">💰</div>Belum ada transaksi</div>'; return; }
   list.innerHTML = money.map(m => `<div class="money-entry">
     <div class="money-cat-dot" style="background:${m.type==='in'?'#40a040':'#e04040'}"></div>
-    <div>
+    <div style="flex:1">
       <div style="font-weight:500;font-size:0.88rem">${m.desc}</div>
       <div style="font-size:0.75rem;color:var(--text3)">${new Date(m.date).toLocaleDateString('id-ID',{day:'numeric',month:'short'})} • ${m.category}</div>
     </div>
     <span class="money-amount ${m.type}">${m.type==='in'?'+':'-'}Rp ${m.amount.toLocaleString('id')}</span>
+    <button onclick="openMoneyModal('${m.id}')" style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:0.85rem" title="Edit">✏️</button>
     <button onclick="deleteMoney('${m.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3)">✕</button>
   </div>`).join('');
 }
-function openMoneyModal() {
+function openMoneyModal(editId) {
   const today = new Date().toISOString().split('T')[0];
-  openModal(`<div class="modal-title">Catat Transaksi</div>
+  const cats = getMoneyCats();
+  let ex = null;
+  if (editId) {
+    ex = load('money').find(m => m.id === editId);
+  }
+  openModal(`<div class="modal-title">${ex ? 'Edit' : 'Catat'} Transaksi</div>
     <div class="form-row">
-      <div class="form-group"><label>Tanggal</label><input type="date" id="mn-date" value="${today}"></div>
-      <div class="form-group"><label>Jenis</label><select id="mn-type"><option value="out">Pengeluaran</option><option value="in">Pemasukan</option></select></div>
+      <div class="form-group"><label>Tanggal</label><input type="date" id="mn-date" value="${ex?.date||today}"></div>
+      <div class="form-group"><label>Jenis</label><select id="mn-type"><option value="out" ${ex?.type==='out'?'selected':''}>Pengeluaran</option><option value="in" ${ex?.type==='in'?'selected':''}>Pemasukan</option></select></div>
     </div>
-    <div class="form-group"><label>Keterangan</label><input type="text" id="mn-desc" placeholder="Contoh: Makan siang, Gaji..."></div>
+    <div class="form-group"><label>Keterangan</label><input type="text" id="mn-desc" placeholder="Contoh: Makan siang, Gaji..." value="${ex?.desc||''}"></div>
     <div class="form-row">
-      <div class="form-group"><label>Nominal (Rp)</label><input type="number" id="mn-amount" placeholder="50000"></div>
-      <div class="form-group"><label>Kategori</label><select id="mn-cat">
-        <option>Makan & Minum</option><option>Transport</option><option>Belanja</option><option>Hiburan</option><option>Kesehatan</option><option>Tagihan</option><option>Gaji</option><option>Lainnya</option>
-      </select></div>
+      <div class="form-group"><label>Nominal (Rp)</label><input type="number" id="mn-amount" placeholder="50000" value="${ex?.amount||''}"></div>
+      <div class="form-group"><label>Kategori</label><select id="mn-cat">${cats.map(c=>`<option value="${c}" ${ex?.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
     </div>
-    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveMoney()">Simpan</button></div>`);
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveMoney('${editId||''}')">Simpan</button></div>`);
   setTimeout(()=>document.getElementById('mn-desc').focus(),100);
 }
-function saveMoney() {
+function saveMoney(editId) {
   const amount = parseFloat(document.getElementById('mn-amount').value);
   const desc = document.getElementById('mn-desc').value.trim();
   if (!desc || isNaN(amount)) return;
-  const money = load('money');
-  money.push({ id: Date.now().toString(), date: document.getElementById('mn-date').value, type: document.getElementById('mn-type').value, desc, amount, category: document.getElementById('mn-cat').value });
+  let money = load('money');
+  const entry = { id: editId||Date.now().toString(), date: document.getElementById('mn-date').value, type: document.getElementById('mn-type').value, desc, amount, category: document.getElementById('mn-cat').value };
+  if (editId) {
+    const i = money.findIndex(m => m.id === editId);
+    if (i >= 0) money[i] = entry;
+  } else {
+    money.push(entry);
+  }
   save('money', money);
   closeModal();
   renderMoney();
@@ -1314,11 +1751,50 @@ function deleteMoney(id) {
   save('money', load('money').filter(x => x.id !== id));
   renderMoney();
 }
+function openManageMoneyCategories() {
+  const custom = load('money_custom_cats', []);
+  openModal(`<div class="modal-title">Kelola Kategori Uang</div>
+    <div style="margin-bottom:1rem">
+      <div style="font-size:0.82rem;color:var(--text2);margin-bottom:0.5rem">Default: ${DEFAULT_MONEY_CATS.join(', ')}</div>
+      <div id="money-cats-list">${custom.map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bg2)"><span style="flex:1">${c}</span><button onclick="deleteMoneyCategory('${c.replace(/'/g,"\\'")}');this.closest('div').remove()" style="background:none;border:none;cursor:pointer;color:var(--danger)">✕</button></div>`).join('')||'<div style="color:var(--text3);font-size:0.82rem">Belum ada kategori custom</div>'}</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <input type="text" id="money-newcat" placeholder="Kategori baru..." style="flex:1">
+      <button class="btn btn-primary" onclick="addMoneyCategory()">+ Tambah</button>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Selesai</button></div>`);
+}
+function addMoneyCategory() {
+  const name = document.getElementById('money-newcat').value.trim();
+  if (!name) return;
+  const cats = load('money_custom_cats', []);
+  if (!cats.includes(name) && !DEFAULT_MONEY_CATS.includes(name)) { cats.push(name); save('money_custom_cats', cats); }
+  document.getElementById('money-newcat').value = '';
+  const el = document.getElementById('money-cats-list');
+  const all = load('money_custom_cats', []);
+  el.innerHTML = all.map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bg2)"><span style="flex:1">${c}</span><button onclick="deleteMoneyCategory('${c.replace(/'/g,"\\'")}');this.closest('div').remove()" style="background:none;border:none;cursor:pointer;color:var(--danger)">✕</button></div>`).join('');
+}
+function deleteMoneyCategory(name) {
+  save('money_custom_cats', load('money_custom_cats', []).filter(c => c !== name));
+}
 
 // ====== MOOD ======
+let currentMoodMonth = new Date().getMonth();
+let currentMoodYear = new Date().getFullYear();
+const MOOD_COLORS = {
+  '😄': '#ffe066', '🤩': '#ffd700', '🙂': '#90ee90', '😐': '#b0c4de',
+  '😔': '#9bb8d3', '😤': '#f08080', '😰': '#dda0dd', '😴': '#c8c8c8',
+  '😢': '#87ceeb', '🥰': '#ffb6c1', '😎': '#98fb98', '🤒': '#d2b48c'
+};
+function changeMoodMonth(dir) {
+  currentMoodMonth += dir;
+  if (currentMoodMonth < 0) { currentMoodMonth = 11; currentMoodYear--; }
+  if (currentMoodMonth > 11) { currentMoodMonth = 0; currentMoodYear++; }
+  renderMood();
+}
 function selectMood(m) {
   selectedMoodValue = m;
-  document.querySelectorAll('.mood-option').forEach(o => {
+  document.querySelectorAll('.mood-emoji-btn').forEach(o => {
     o.classList.remove('selected');
     if (o.dataset.mood === m) o.classList.add('selected');
   });
@@ -1334,23 +1810,67 @@ function saveMood() {
   save('moods', moods);
   document.getElementById('mood-note').value = '';
   selectedMoodValue = null;
-  document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
+  document.querySelectorAll('.mood-emoji-btn').forEach(o => o.classList.remove('selected'));
   renderMood();
 }
 function renderMood() {
-  const moods = load('moods').sort((a,b) => new Date(b.date)-new Date(a.date));
-  const log = document.getElementById('mood-log');
-  log.innerHTML = moods.slice(0,20).map(m => `<div class="mood-entry">
-    <span class="mood-entry-date">${new Date(m.date).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</span>
-    <span style="font-size:1rem">${m.mood}</span>
-    <span style="color:var(--text3);font-size:0.8rem;flex:1">${m.note||''}</span>
-    <button onclick="deleteMood('${m.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3)">✕</button>
-  </div>`).join('') || '<div class="empty-state"><div class="empty-icon">🌈</div>Belum ada catatan mood</div>';
-  // mood chart
-  const last30 = moods.slice(0, 30).reverse();
-  const moodVals = {'😄 Senang banget':5,'🤩 Bersemangat':5,'🙂 Oke':4,'😐 Biasa aja':3,'😰 Cemas':2,'😴 Lelah':2,'😔 Sedih':1,'😤 Kesal':1};
-  const ctx = document.getElementById('mood-chart').getContext('2d');
-  drawLineChart(ctx, last30.map(m=>m.date.slice(5)), last30.map(m=>moodVals[m.mood]||3), '#7b6ea0', 1, 5);
+  const moods = load('moods');
+  const moodMap = {};
+  moods.forEach(m => { moodMap[m.date] = m; });
+  const MONTH_NAMES = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const labelEl = document.getElementById('mood-month-label');
+  if (labelEl) labelEl.textContent = `${MONTH_NAMES[currentMoodMonth]} ${currentMoodYear}`;
+  const cal = document.getElementById('mood-calendar');
+  if (!cal) return;
+  const firstDay = new Date(currentMoodYear, currentMoodMonth, 1).getDay();
+  const daysInMonth = new Date(currentMoodYear, currentMoodMonth+1, 0).getDate();
+  const today = new Date().toISOString().split('T')[0];
+  const dayNames = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  let html = dayNames.map(d=>`<div class="mood-day-header">${d}</div>`).join('');
+  for (let i = 0; i < firstDay; i++) html += `<div class="mood-cal-day empty"></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${currentMoodYear}-${String(currentMoodMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const entry = moodMap[dateStr];
+    const isToday = dateStr === today;
+    const bg = entry ? (MOOD_COLORS[entry.mood] || '#e8e0d4') : '';
+    const tip = entry ? `${entry.mood} ${MOOD_LABELS[entry.mood]||''}${entry.note?' — '+entry.note:''}` : `${d}`;
+    html += `<div class="mood-cal-day ${!entry?'no-mood':''} ${isToday?'today-box':''}" 
+      style="${entry?`background:${bg}`:'background:var(--bg2)'}" 
+      title="${tip}"
+      onclick="moodCalClick('${dateStr}','${entry?.mood||''}','${(entry?.note||'').replace(/'/g,"&#39;")}')"
+    >
+      <span class="mood-cal-day-num">${d}</span>
+      ${entry ? `<span style="font-size:1rem;line-height:1">${entry.mood}</span>` : `<span style="font-size:0.65rem;color:var(--text3)">${d}</span>`}
+    </div>`;
+  }
+  cal.innerHTML = html;
+  // legend
+  const usedMoods = [...new Set(moods.map(m=>m.mood))];
+  const legend = document.getElementById('mood-legend');
+  if (legend) {
+    legend.innerHTML = usedMoods.map(m => `<span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${MOOD_COLORS[m]||'#ccc'}"></span>${m} ${MOOD_LABELS[m]||''}</span>`).join('');
+  }
+}
+function moodCalClick(date, mood, note) {
+  if (mood) {
+    openModal(`<div style="text-align:center;padding:1rem">
+      <div style="font-size:3rem;margin-bottom:0.5rem">${mood}</div>
+      <div style="font-weight:600;font-size:1rem">${MOOD_LABELS[mood]||''}</div>
+      <div style="color:var(--text3);font-size:0.85rem;margin:0.4rem 0">${new Date(date).toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
+      ${note ? `<div style="margin-top:0.75rem;background:var(--bg2);border-radius:10px;padding:0.75rem;font-size:0.88rem;color:var(--text2)">${note}</div>` : ''}
+      <div class="modal-actions" style="justify-content:center"><button class="btn btn-secondary" onclick="closeModal()">Tutup</button><button class="btn btn-danger btn-sm" onclick="deleteMoodByDate('${date}')">Hapus</button></div>
+    </div>`);
+  } else {
+    // set date and let user pick mood
+    document.getElementById('mood-date').value = date;
+    document.getElementById('mood-note').focus();
+    closeModal();
+  }
+}
+function deleteMoodByDate(date) {
+  save('moods', load('moods').filter(m => m.date !== date));
+  closeModal();
+  renderMood();
 }
 function deleteMood(id) {
   save('moods', load('moods').filter(x => x.id !== id));
@@ -1479,47 +1999,6 @@ function toggleWish(id) {
 function deleteWish(id) {
   save('wishlist', load('wishlist').filter(x => x.id !== id));
   renderWishlist();
-}
-
-// ====== CUSTOM FEATURES ======
-function renderCustom() {
-  const features = load('custom_features');
-  const grid = document.getElementById('custom-features-grid');
-  grid.innerHTML = features.map(f => `<div class="custom-feature-card" style="border-style:solid">
-    <div style="font-size:2rem;margin-bottom:0.5rem">${f.icon}</div>
-    <div style="font-weight:600;font-size:0.9rem">${f.name}</div>
-    <div style="color:var(--text3);font-size:0.78rem;margin-top:4px">${f.desc||''}</div>
-    <button onclick="deleteCustom('${f.id}')" style="margin-top:0.75rem;background:none;border:none;cursor:pointer;color:var(--text3);font-size:0.8rem">Hapus</button>
-  </div>`).join('');
-}
-function openCustomFeatureModal() {
-  openModal(`<div class="modal-title">Tambah Fitur Baru</div>
-    <div class="form-group"><label>Nama Fitur</label><input type="text" id="cf-name" placeholder="Contoh: Jurnal Syukur, Sleep Tracker..."></div>
-    <div class="form-row">
-      <div class="form-group"><label>Icon/Emoji</label><input type="text" id="cf-icon" placeholder="📔" style="width:80px"></div>
-      <div class="form-group"><label>Deskripsi</label><input type="text" id="cf-desc" placeholder="Penjelasan singkat..."></div>
-    </div>
-    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="saveCustomFeature()">Tambah</button></div>`);
-  setTimeout(()=>document.getElementById('cf-name').focus(),100);
-}
-function saveCustomFeature() {
-  const name = document.getElementById('cf-name').value.trim();
-  if (!name) return;
-  const features = load('custom_features');
-  features.push({ id: Date.now().toString(), name, icon: document.getElementById('cf-icon').value||'📌', desc: document.getElementById('cf-desc').value });
-  save('custom_features', features);
-  closeModal();
-  renderCustom();
-}
-function deleteCustom(id) {
-  save('custom_features', load('custom_features').filter(x => x.id !== id));
-  renderCustom();
-}
-function loadCustomNotes() {
-  document.getElementById('custom-notes').value = localStorage.getItem(key('custom_notes'))||'';
-}
-function saveCustomNotes() {
-  localStorage.setItem(key('custom_notes'), document.getElementById('custom-notes').value);
 }
 
 // ====== MODAL ======
