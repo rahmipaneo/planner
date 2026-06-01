@@ -315,6 +315,35 @@ label { font-size: 0.85rem; font-weight: 500; color: var(--text2); display: bloc
 .mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 90; }
 .mobile-overlay.open { display: block; }
 
+/* MOBILE TOP BAR */
+.mobile-topbar {
+  display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 150;
+  height: 56px; background: var(--card); border-bottom: 1px solid var(--border);
+  align-items: center; padding: 0 0.75rem; gap: 10px;
+}
+.mobile-back-btn {
+  width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg); cursor: pointer; display: flex; align-items: center;
+  justify-content: center; font-size: 1.1rem; flex-shrink: 0; transition: background 0.15s;
+}
+.mobile-back-btn:active { background: var(--bg2); }
+.mobile-topbar-title {
+  font-family: 'DM Serif Display', serif; font-size: 1.05rem; flex: 1;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mobile-menu-btn {
+  width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg); cursor: pointer; display: flex; align-items: center;
+  justify-content: center; font-size: 1.1rem; flex-shrink: 0; transition: background 0.15s;
+}
+.mobile-menu-btn:active { background: var(--bg2); }
+
+@media (max-width: 700px) {
+  .mobile-topbar { display: flex; }
+  .hamburger { display: none !important; } /* replaced by topbar */
+  .main { padding-top: calc(56px + 1rem); }
+}
+
 /* Accent per user */
 .user-ami .btn-primary, .user-ami .login-btn { background: var(--accent-ami); }
 .user-ami input:focus, .user-ami textarea:focus, .user-ami select:focus { border-color: var(--accent-ami); }
@@ -369,6 +398,13 @@ canvas { max-width: 100%; }
 <div id="app">
   <div class="mobile-overlay" id="mobile-overlay" onclick="closeSidebar()"></div>
   <button class="hamburger" id="hamburger" onclick="toggleSidebar()">☰</button>
+
+  <!-- MOBILE TOP BAR -->
+  <div class="mobile-topbar" id="mobile-topbar">
+    <button class="mobile-back-btn" id="mobile-back-btn" onclick="goBack()" title="Kembali">&#8249;</button>
+    <span class="mobile-topbar-title" id="mobile-topbar-title">Dashboard</span>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">&#9776;</button>
+  </div>
 
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -741,11 +777,24 @@ function closeSidebar() {
 }
 
 // ====== NAVIGATION ======
+const PAGE_TITLES = {
+  dashboard: 'Dashboard', habit: 'Jadwal Harian', monthly: 'Rencana Bulanan',
+  yearly: 'Rencana Tahunan', todo: 'To Do List', diary: 'Diary',
+  gallery: 'Gallery Foto', weight: 'Berat Badan', money: 'Money Tracker',
+  mood: 'Mood Tracker', books: 'Tracker Buku', wishlist: 'Keinginan & Kebutuhan', custom: 'Fitur Lainnya'
+};
+let pageHistory = ['dashboard'];
 function goPage(p, el) {
+  if (p !== pageHistory[pageHistory.length - 1]) pageHistory.push(p);
   document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById('page-' + p).classList.add('active');
   if (el) el.classList.add('active');
+  // update mobile top bar
+  const titleEl = document.getElementById('mobile-topbar-title');
+  const backBtn = document.getElementById('mobile-back-btn');
+  if (titleEl) titleEl.textContent = PAGE_TITLES[p] || p;
+  if (backBtn) backBtn.style.visibility = (pageHistory.length > 1) ? 'visible' : 'hidden';
   closeSidebar();
   if (p === 'habit') renderHabit();
   if (p === 'monthly') renderMonthly();
@@ -760,6 +809,15 @@ function goPage(p, el) {
   if (p === 'wishlist') renderWishlist();
   if (p === 'custom') renderCustom();
   if (p === 'dashboard') renderDashboard();
+}
+function goBack() {
+  if (pageHistory.length <= 1) return;
+  pageHistory.pop();
+  const prev = pageHistory[pageHistory.length - 1];
+  const navEl = document.querySelector('.nav-item[data-page="' + prev + '"]');
+  goPage(prev, navEl);
+  // after going back, pop the duplicate that goPage just pushed
+  if (pageHistory[pageHistory.length - 1] === prev && pageHistory[pageHistory.length - 2] === prev) pageHistory.pop();
 }
 
 // ====== INIT ======
@@ -784,6 +842,10 @@ function initAll() {
   renderDashboard();
   renderHabit();
   loadCustomNotes();
+  // init mobile topbar
+  const backBtn = document.getElementById('mobile-back-btn');
+  if (backBtn) backBtn.style.visibility = 'hidden';
+  pageHistory = ['dashboard'];
 }
 
 // ====== DASHBOARD ======
